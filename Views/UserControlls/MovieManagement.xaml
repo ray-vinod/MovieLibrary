@@ -7,221 +7,241 @@
              xmlns:CustomControlls="clr-namespace:MovieLibrary.Views.CustomControlls"
              mc:Ignorable="d"
              d:DesignHeight="450"
-             d:DesignWidth="800">
+             d:DesignWidth="800"
+             SizeChanged="UserControl_SizeChanged">
 
-    <UserControl.Resources>
+        <UserControl.Resources>
 
-        <!-- Style for Action Buttons -->
-        <Style x:Key="ActionButtonStyle"
-               TargetType="Button">
-            <Setter Property="Width"
-                    Value="60"/>
-            <Setter Property="Margin"
-                    Value="5,0,5,0"/>
-            <Setter Property="Padding"
-                    Value="5,2"/>
-            <Setter Property="FontWeight"
-                    Value="Bold"/>
-        </Style>
+                <!-- Style for Action Buttons -->
+                <Style x:Key="ActionButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Width"
+                                Value="60"/>
+                        <Setter Property="Margin"
+                                Value="5,0,5,0"/>
+                        <Setter Property="Padding"
+                                Value="5,2"/>
+                        <Setter Property="FontWeight"
+                                Value="Bold"/>
+                </Style>
 
-        <!-- Style for DataGrid Column Headers -->
-        <Style x:Key="DataGridColumnHeaderStyle"
-               TargetType="DataGridColumnHeader">
-            <Setter Property="FontWeight"
-                    Value="Bold"/>
-            <Setter Property="Width"
-                    Value="Auto"/>
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center"/>
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Center"/>
-        </Style>
+                <!-- Style for DataGrid Column Headers -->
+                <Style x:Key="DataGridColumnHeaderStyle"
+                       TargetType="DataGridColumnHeader">
+                        <Setter Property="FontWeight"
+                                Value="Bold"/>
+                        <Setter Property="Width"
+                                Value="Auto"/>
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center"/>
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Center"/>
+                </Style>
 
-        <!-- Style for DataGrid Rows -->
-        <Style x:Key="DataGridRowStyle"
-               TargetType="DataGridRow">
-            <Setter Property="Background"
-                    Value="White"/>
-            <Setter Property="Foreground"
-                    Value="Black"/>
-            <Setter Property="FontSize"
-                    Value="14"/>
-            <Setter Property="Height"
-                    Value="32"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,5"/>
-        </Style>
-    </UserControl.Resources>
+                <!-- Style for DataGrid Rows -->
+                <Style x:Key="DataGridRowStyle"
+                       TargetType="DataGridRow">
+                        <Setter Property="Background"
+                                Value="White"/>
+                        <Setter Property="Foreground"
+                                Value="Black"/>
+                        <Setter Property="FontSize"
+                                Value="14"/>
+                        <Setter Property="Height"
+                                Value="32"/>
+                        <Setter Property="Margin"
+                                Value="0,0,0,5"/>
+                </Style>
+        </UserControl.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid>
+                <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-        <!-- Movie Search Controlls -->
-        <Expander x:Name="MovieSearch"
-                  Header="Movie Search"
-                  Grid.Row="0"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Top"
-                  Margin="10">
-            <StackPanel Orientation="Horizontal"
-                        Margin="10">
+                <!-- Movie Search Controls -->
+                <Expander x:Name="MovieSearch"
+                          Header="Movie Search"
+                          Grid.Row="0"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          Margin="10">
 
-                <!-- Title search controll -->
-                <CustomControlls:FormTextBox x:Name="TitleSearchBox"
-                                             Width="250"
-                                             Placeholder="Search by Title"
-                                             Margin="0,0,10,0"/>
+                        <Grid>
+                                <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                <Button x:Name="TitleSearchButton"
-                        Click="TitleSearchButton_Click"
-                        Width="75"
-                        Padding="5"
+                                <!-- Title Search Panel -->
+                                <StackPanel x:Name="TitleSearchPanel"
+                                            Grid.Column="0"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            Margin="0,10,50,0">
+
+                                        <CustomControlls:FormTextBox x:Name="TitleSearchBox"
+                                                                     Width="250"
+                                                                     Placeholder="Search by Title"
+                                                                     Margin="0,0,20,10"/>
+                                        <Button x:Name="TitleSearchButton"
+                                                Click="TitleSearchButton_Click"
+                                                Width="150"
+                                                Padding="5"
+                                                Margin="0,0,20,10"
+                                                FontWeight="Bold"
+                                                Background="#c4FBD1"
+                                                HorizontalAlignment="Right">
+                                                <StackPanel Orientation="Horizontal"
+                                                            HorizontalAlignment="Center">
+                                                        <Image Source="/assets/search.png"
+                                                               Width="16"
+                                                               Height="16"
+                                                               Margin="0,0,5,0"/>
+                                                        <TextBlock Text="Search(Linear)"
+                                                                   VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                        </Button>
+                                </StackPanel>
+
+                                <!-- ID Search Panel -->
+                                <StackPanel x:Name="IdSearchPanel"
+                                            Grid.Column="1"
+                                            Orientation="Vertical"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Margin="0,10,50,0">
+
+                                        <CustomControlls:FormTextBox x:Name="IdSearchBox"
+                                                                     Width="150"
+                                                                     Placeholder="Search by ID"
+                                                                     Margin="0,0,20,10"/>
+                                        <Button x:Name="IdSearchButton"
+                                                Click="IdSearchButton_Click"
+                                                Width="150"
+                                                Padding="5"
+                                                FontWeight="Bold"
+                                                Margin="0,0,20,10"
+                                                Background="#c4FBD1"
+                                                HorizontalAlignment="Right">
+                                                <StackPanel Orientation="Horizontal"
+                                                            HorizontalAlignment="Center">
+                                                        <Image Source="/assets/search.png"
+                                                               Width="16"
+                                                               Height="16"
+                                                               Margin="0,0,5,0"/>
+                                                        <TextBlock Text="Search(Binary)"
+                                                                   VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                        </Button>
+                                </StackPanel>
+                        </Grid>
+                </Expander>
+
+                <!-- DataGrid -->
+                <Button x:Name="AddButton"
+                        Grid.Row="1"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="10"
+                        Width="100"
+                        Padding="5,10"
                         FontWeight="Bold"
                         Background="#c4FBD1"
-                        HorizontalAlignment="Right">
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center">
-                        <Image Source="/assets/search.png"
-                               Width="16"
-                               Height="16"
-                               Margin="0,0,5,0"/>
-                        <TextBlock Text="Search"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
+                        Click="Add_Click">
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                                <Image Source="/assets/add.png"
+                                       Width="16"
+                                       Height="16"
+                                       Margin="0,0,5,0"/>
+                                <TextBlock Text="Add New"
+                                           VerticalAlignment="Center"/>
+                        </StackPanel>
                 </Button>
 
-                <!-- ID search controll -->
-                <CustomControlls:FormTextBox x:Name="IdSearchBox"
-                                             Width="200"
-                                             Placeholder="Search by Title"
-                                             Margin="0,0,10,0"/>
+                <TextBlock x:Name="MovieGridTitle"
+                           Text="Movie List"
+                           Grid.Row="1"
+                           HorizontalAlignment="Center"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="10,10,10,20"/>
 
-                <Button x:Name="IdSearchButton"
-                        Click="IdSearchButton_Click"
-                        Width="75"
-                        Padding="5"
-                        FontWeight="Bold"
-                        Background="#c4FBD1"
-                        HorizontalAlignment="Right">
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center">
-                        <Image Source="/assets/search.png"
-                               Width="16"
-                               Height="16"
-                               Margin="0,0,5,0"/>
-                        <TextBlock Text="Search"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
+                <DataGrid x:Name="MoviesDataGrid"
+                          Grid.Row="2"
+                          Margin="10,1"
+                          AutoGenerateColumns="False"
+                          ItemsSource="{Binding}"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserReorderColumns="False"
+                          AlternatingRowBackground="#F0F0F0"
+                          HeadersVisibility="Column"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          RowHeight="32"
+                          Background="White"
+                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                          RowStyle="{StaticResource DataGridRowStyle}"
+                          RowEditEnding="MoviesDataGrid_RowEditEnding"
+                          KeyDown="MoviesDataGrid_KeyDown">
 
-            </StackPanel>
-        </Expander>
+                        <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID"
+                                                    Binding="{Binding Id}"
+                                                    CanUserSort="False"/>
 
-        <!-- DataGrid -->
-        <Button x:Name="AddButton"
-                Grid.Row="1"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="10"
-                Width="100"
-                Padding="5,10"
-                FontWeight="Bold"
-                Background="#c4FBD1"
-                Click="Add_Click">
+                                <DataGridTextColumn Header="Title"
+                                                    Binding="{Binding Title}"
+                                                    Width="*"
+                                                    CanUserSort="False"/>
 
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-                <Image Source="/assets/add.png"
-                       Width="16"
-                       Height="16"
-                       Margin="0,0,5,0"/>
-                <TextBlock Text="Add New"
-                           VerticalAlignment="Center"/>
-            </StackPanel>
-        </Button>
+                                <DataGridTextColumn Header="Genre"
+                                                    Binding="{Binding Genre}"
+                                                    CanUserSort="False"/>
 
-        <TextBlock x:Name="MovieGridTitle"
-                   Text="Movie List"
-                   Grid.Row="1"
-                   HorizontalAlignment="Center"
-                   FontSize="16"
-                   FontWeight="Bold"
-                   Margin="10,10,10,20"/>
+                                <DataGridTextColumn Header="Director"
+                                                    Binding="{Binding Director}"
+                                                    CanUserSort="False"/>
 
-        <DataGrid x:Name="MoviesDataGrid"
-                  Grid.Row="2"
-                  Margin="0"
-                  AutoGenerateColumns="False"
-                  ItemsSource="{Binding}"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  CanUserReorderColumns="False"
-                  AlternatingRowBackground="#F0F0F0"
-                  HeadersVisibility="Column"
-                  IsReadOnly="True"
-                  SelectionMode="Single"
-                  SelectionUnit="FullRow"
-                  RowHeight="32"
-                  Background="White"
-                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                  RowStyle="{StaticResource DataGridRowStyle}"
-                  RowEditEnding="MoviesDataGrid_RowEditEnding"
-                  KeyDown="MoviesDataGrid_KeyDown">
+                                <DataGridTextColumn Header="Year"
+                                                    Binding="{Binding ReleaseYear}"
+                                                    CanUserSort="True"/>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID"
-                                    Binding="{Binding Id}"
-                                    CanUserSort="False"/>
+                                <DataGridCheckBoxColumn Header="Available"
+                                                        Binding="{Binding IsAvailable}"
+                                                        CanUserSort="False"/>
 
-                <DataGridTextColumn Header="Title"
-                                    Binding="{Binding Title}"
-                                    Width="*"
-                                    CanUserSort="False"/>
-
-                <DataGridTextColumn Header="Genre"
-                                    Binding="{Binding Genre}"
-                                    CanUserSort="False"/>
-
-                <DataGridTextColumn Header="Director"
-                                    Binding="{Binding Director}"
-                                    CanUserSort="False"/>
-
-                <DataGridTextColumn Header="Year"
-                                    Binding="{Binding ReleaseYear}"
-                                    CanUserSort="True"/>
-
-                <DataGridCheckBoxColumn Header="Available"
-                                        Binding="{Binding IsAvailable}"
-                                        CanUserSort="False"/>
-
-                <!-- Action Buttons -->
-                <DataGridTemplateColumn Header="Actions"
-                                        Width="Auto">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Center">
-                                <Button x:Name="EditButton"
-                                        Content="Edit"
-                                        Click="Edit_Click"
-                                        Tag="{Binding}"
-                                        Style="{StaticResource ActionButtonStyle}"
-                                        Background="#ffffE0"/>
-                                <Button x:Name="DeleteButton"
-                                        Content="Delete"
-                                        Click="Delete_Click"
-                                        Tag="{Binding}"
-                                        Style="{StaticResource ActionButtonStyle}"
-                                        Background="#F8D2D8"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
+                                <!-- Action Buttons -->
+                                <DataGridTemplateColumn Header="Actions"
+                                                        Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    HorizontalAlignment="Center">
+                                                                <Button x:Name="EditButton"
+                                                                        Content="Edit"
+                                                                        Click="Edit_Click"
+                                                                        Tag="{Binding}"
+                                                                        Style="{StaticResource ActionButtonStyle}"
+                                                                        Background="#ffffE0"/>
+                                                                <Button x:Name="DeleteButton"
+                                                                        Content="Delete"
+                                                                        Click="Delete_Click"
+                                                                        Tag="{Binding}"
+                                                                        Style="{StaticResource ActionButtonStyle}"
+                                                                        Background="#F8D2D8"/>
+                                                        </StackPanel>
+                                                </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                </DataGrid>
+        </Grid>
 </UserControl>

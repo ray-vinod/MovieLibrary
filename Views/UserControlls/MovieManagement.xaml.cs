@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using MovieLibrary.Data;
 using MovieLibrary.Models;
+using MovieLibrary.Services;
 
 namespace MovieLibrary.Views.UserControlls;
 
@@ -25,9 +26,23 @@ public partial class MovieManagement : UserControl
         MoviesDataGrid.ItemsSource = _movieRepository?.GetAllMovies().ToList();
     }
 
+    private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        if (e.NewSize.Width < 600)
+        {
+            TitleSearchPanel.Orientation = Orientation.Vertical;
+            TitleSearchPanel.HorizontalAlignment = HorizontalAlignment.Center;
+        }
+        else
+        {
+            TitleSearchPanel.Orientation = Orientation.Horizontal;
+        }
+    }
+
     // Linear search by title
     private void TitleSearchButton_Click(object sender, RoutedEventArgs e)
     {
+        NotifierService.Instance.UpdateStatus("Loading movies...");
     }
 
     // Binary search by ID (ensure sorted first)

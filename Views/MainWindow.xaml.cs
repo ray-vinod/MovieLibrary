@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using MovieLibrary.Services;
 using MovieLibrary.Views.UserControlls;
 
 namespace MovieLibrary.Views;
@@ -10,6 +11,19 @@ public partial class MainWindow : Window
         InitializeComponent();
         MainContent.Content = new Home();
         StatusText.Text = "Welcome to Movie Library";
+
+        NotifierService.Instance.StatusUpdated += OnStatusUpdated;
+    }
+
+    private void OnStatusUpdated(string message)
+    {
+        Dispatcher.Invoke(() => StatusText.Text = message);
+    }
+
+    protected override void OnClosed(EventArgs e)
+    {
+        NotifierService.Instance.StatusUpdated -= OnStatusUpdated;
+        base.OnClosed(e);
     }
 
     private void Home_Click(object sender, RoutedEventArgs e)
