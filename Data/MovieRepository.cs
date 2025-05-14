@@ -5,20 +5,12 @@ namespace MovieLibrary.Data;
 
 public class MovieRepository
 {
-    private Hashtable movieLookup = new();
-    private LinkedList<Movie> movies = new();
-
-    public MovieRepository()
-    {
-        // Initialize with some sample movies
-        AddMovie(new Movie("M001", "Inception", "Sci-Fi", 2010, "Christopher Nolan"));
-        AddMovie(new Movie("M002", "The Godfather", "Crime", 1972, "Francis Ford Coppola"));
-        AddMovie(new Movie("M003", "The Dark Knight", "Action", 2008, "Christopher Nolan"));
-    }
+    private readonly Hashtable _movieLookup = new();
+    private readonly LinkedList<Movie> _movies = new();
 
     public void AddMovie(Movie movie)
     {
-        if (movieLookup.ContainsKey(movie.Id))
+        if (_movieLookup.ContainsKey(movie.Id!))
         {
             throw new ArgumentException($"Movie with ID {movie.Id} already exists.");
         }
@@ -28,45 +20,43 @@ public class MovieRepository
             throw new ArgumentException("Movie ID and Title cannot be empty.");
         }
 
-        movieLookup.Add(movie.Id, movie);
-        movies.AddLast(movie);
+        _movieLookup.Add(movie.Id, movie);
+        _movies.AddLast(movie);
     }
 
     public Movie? GetMovieById(string id)
     {
-        return movieLookup.ContainsKey(id) ? movieLookup[id] as Movie : null;
+        return _movieLookup.ContainsKey(id) ? _movieLookup[id] as Movie : null;
     }
 
     public IEnumerable<Movie> GetAllMovies()
     {
-        return movies;
+        return _movies;
     }
 
     public void UpdateMovie(Movie movie)
     {
-        if (movieLookup.ContainsKey(movie.Id))
+        if (_movieLookup.ContainsKey(movie.Id!))
         {
-            movieLookup[movie.Id] = movie;
-            var existingMovie = movies.FirstOrDefault(m => m.Id == movie.Id);
+            _movieLookup[movie.Id!] = movie;
+            var existingMovie = _movies.FirstOrDefault(m => m.Id == movie.Id);
             if (existingMovie != null)
             {
-                movies.Remove(existingMovie);
-                movies.AddLast(movie);
+                _movies.Remove(existingMovie);
+                _movies.AddLast(movie);
             }
         }
     }
 
     public void DeleteMovie(string id)
     {
-        if (movieLookup.ContainsKey(id))
+        if (_movieLookup.ContainsKey(id))
         {
-            Movie? movie = movieLookup[id] as Movie;
-            if (movie != null)
+            if (_movieLookup[id] is Movie movie)
             {
-                movies.Remove(movie);
-                movieLookup.Remove(id);
+                _movies.Remove(movie);
+                _movieLookup.Remove(id);
             }
         }
     }
-
 }

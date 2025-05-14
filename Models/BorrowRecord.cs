@@ -4,13 +4,14 @@ namespace MovieLibrary.Models;
 
 public class BorrowRecord
 {
-    public string id { get; set; }
+    [Required]
+    public string? Id { get; set; }
 
     [Required]
-    public string MovieId { get; set; }
+    public string? MovieId { get; set; }
 
     [Required]
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
 
     [Required]
     [DataType(DataType.Date)]
@@ -19,13 +20,4 @@ public class BorrowRecord
     [Required]
     [DataType(DataType.Date)]
     public DateTime ReturnDate { get; set; }
-
-    public BorrowRecord(string id, string movieId, string userId, DateTime borrowDate, DateTime returnDate)
-    {
-        this.id = id;
-        MovieId = movieId;
-        UserId = userId;
-        BorrowDate = borrowDate;
-        ReturnDate = returnDate;
-    }
 }
