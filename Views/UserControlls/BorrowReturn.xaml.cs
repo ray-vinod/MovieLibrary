@@ -30,11 +30,39 @@ public partial class BorrowReturn : UserControl
         string userId = UserIdBox.Input.Text.Trim();
         string movieId = MovieIdBox.Input.Text.Trim();
 
-        var user = _userRepository.GetUserById(userId);
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(movieId))
+        {
+            NotifierService.Instance.UpdateStatus("There is incomplete information userId/movieId");
+            return;
+        }
 
-        string result = _borrowReturnService.BorrowMovie(movieId, user!);
-        MessageBox.Show(result);
+        var user = _userRepository.GetAllUsers()
+            .FirstOrDefault(u => string.Equals(u.Id, userId, StringComparison.OrdinalIgnoreCase));
+        if (user == null)
+        {
+            NotifierService.Instance.UpdateStatus("User not found.");
+            return;
+        }
+
+        var movie = _movieRepository.GetAllMovies()
+            .FirstOrDefault(m => string.Equals(m.Id, movieId, StringComparison.OrdinalIgnoreCase));
+        if (movie == null)
+        {
+            NotifierService.Instance.UpdateStatus("Movie not found.");
+            return;
+        }
+
+        string result = _borrowReturnService.BorrowMovie(movie.Id!, user);
+        Clear();
+
+        NotifierService.Instance.UpdateStatus(result);
         RefreshBorrowRecords();
+    }
+
+    private void Clear()
+    {
+        UserIdBox.Input.Text = "";
+        MovieIdBox.Input.Text = "";
     }
 
     private void ReturnButton_Click(object sender, RoutedEventArgs e)
@@ -42,10 +70,33 @@ public partial class BorrowReturn : UserControl
         string userId = UserIdBox.Input.Text.Trim();
         string movieId = MovieIdBox.Input.Text.Trim();
 
-        var user = _userRepository.GetUserById(userId);
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(movieId))
+        {
+            NotifierService.Instance.UpdateStatus("There is incomplete information userId/movieId");
+            return;
+        }
 
-        string result = _borrowReturnService.ReturnMovie(movieId, user!);
-        MessageBox.Show(result);
+        var user = _userRepository.GetAllUsers()
+            .FirstOrDefault(u => string.Equals(u.Id, userId, StringComparison.OrdinalIgnoreCase));
+        if (user == null)
+        {
+            NotifierService.Instance.UpdateStatus("User not found.");
+            return;
+        }
+
+        var movie = _movieRepository.GetAllMovies()
+            .FirstOrDefault(m => string.Equals(m.Id, movieId, StringComparison.OrdinalIgnoreCase));
+        if (movie == null)
+        {
+            NotifierService.Instance.UpdateStatus("Movie not found.");
+            return;
+        }
+
+        string result = _borrowReturnService.ReturnMovie(movie.Id!, user);
+
+        Clear();
+
+        NotifierService.Instance.UpdateStatus(result);
         RefreshBorrowRecords();
     }
 

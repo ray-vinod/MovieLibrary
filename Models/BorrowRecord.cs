@@ -5,19 +5,16 @@ namespace MovieLibrary.Models;
 public class BorrowRecord
 {
     [Required]
-    public string? Id { get; set; }
+    public string Id { get; set; } = "";
 
     [Required]
-    public string? MovieId { get; set; }
+    public string? MovieId { get; set; } = "";
 
     [Required]
-    public string? UserId { get; set; }
+    public string UserId { get; set; } = "";
 
     [Required]
-    [DataType(DataType.Date)]
-    public DateTime BorrowDate { get; set; }
+    public DateTime BorrowDate { get; set; } = DateTime.Now.Date;
 
-    [Required]
-    [DataType(DataType.Date)]
-    public DateTime ReturnDate { get; set; }
+    public DateTime? ReturnDate { get; set; }
 }

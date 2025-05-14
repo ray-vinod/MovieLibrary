@@ -141,13 +141,13 @@
                   Margin="0,0,0,10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Record ID"
-                                    Binding="{Binding RecordID}"
+                                    Binding="{Binding Id}"
                                     Width="*"/>
                 <DataGridTextColumn Header="Movie ID"
-                                    Binding="{Binding MovieID}"
+                                    Binding="{Binding MovieId}"
                                     Width="*"/>
                 <DataGridTextColumn Header="User ID"
-                                    Binding="{Binding UserID}"
+                                    Binding="{Binding UserId}"
                                     Width="*"/>
                 <DataGridTextColumn Header="Borrow Date"
                                     Binding="{Binding BorrowDate}"
