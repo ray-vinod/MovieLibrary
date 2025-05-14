@@ -169,7 +169,8 @@
                                                Style="{StaticResource MenuIconStyle}"/>
                                 </MenuItem.Icon>
                                 <MenuItem Header="About"
-                                          Style="{StaticResource SideMenuItemStyle}">
+                                          Style="{StaticResource SideMenuItemStyle}"
+                                          Click="About_Click">
                                         <MenuItem.Icon>
                                                 <Image Source="pack://application:,,,/Assets/about.jpg"
                                                        Style="{StaticResource MenuIconStyle}"/>

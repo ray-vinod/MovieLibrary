@@ -320,13 +320,11 @@ public partial class MovieManagement : UserControl
                     }
                 }
             }), DispatcherPriority.Background);
-
-            // NotifierService.Instance.UpdateStatus($"New movie '{newMovie.Title}' is added.");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            NotifierService.Instance.UpdateStatus($"An error occurred while adding the movie: {ex.Message}");
-            MessageBox.Show($"An error occurred while adding the movie: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            NotifierService.Instance.UpdateStatus($"An error occurred while adding the movie");
+            //MessageBox.Show($"An error occurred while adding the movie: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -352,10 +350,10 @@ public partial class MovieManagement : UserControl
 
             RefreshDataGrid();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             NotifierService.Instance.UpdateStatus($"An error occurred while deleting the movie '{movie.Title}'.");
-            MessageBox.Show($"An error occurred while deleting the movie: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show($"An error occurred while deleting the movie: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
     }

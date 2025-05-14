@@ -57,8 +57,13 @@ public partial class MainWindow : Window
 
     private void HowToUse_Click(object sender, RoutedEventArgs e)
     {
-
+        MainContent.Content = new HowToUse();
+        StatusText.Text = $"App Status:- How to use";
     }
 
-
+    private void About_Click(object sender, RoutedEventArgs e)
+    {
+        MainContent.Content = new About();
+        StatusText.Text = $"App Status:- About";
+    }
 }
