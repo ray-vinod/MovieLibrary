@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -218,6 +219,52 @@ public partial class MovieManagement : UserControl
                     }
                 }), DispatcherPriority.Background);
             }
+        }
+    }
+
+    private void MoviesDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
+    {
+        e.Handled = true; // Prevent default sort
+
+        var allMovies = _movieRepository.GetAllMovies().ToList();
+        IEnumerable<Movie> sortedMovies = allMovies;
+
+        if (e.Column.Header.ToString() == "Title")
+        {
+            sortedMovies = Services.SortService.BubbleSortByTitle(allMovies);
+            NotifierService.Instance.UpdateStatus("Sorted by Title using Bubble Sort.");
+        }
+        else if (e.Column.Header.ToString() == "ReleaseYear")
+        {
+            sortedMovies = Services.SortService.MergeSortByReleaseYear(allMovies);
+            NotifierService.Instance.UpdateStatus("Sorted by Release Year using Merge Sort.");
+        }
+        else
+        {
+            return;
+        }
+
+        // Toggle sort direction
+        if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
+        {
+            e.Column.SortDirection = ListSortDirection.Ascending;
+        }
+        else
+        {
+            sortedMovies = sortedMovies.Reverse();
+            e.Column.SortDirection = ListSortDirection.Descending;
+        }
+
+        MoviesDataGrid.ItemsSource = sortedMovies
+            .Skip((_currentPage - 1) * _pageSize)
+            .Take(_pageSize)
+            .ToList();
+
+        // Clear sort direction from other columns
+        foreach (var col in MoviesDataGrid.Columns)
+        {
+            if (col != e.Column)
+                col.SortDirection = null;
         }
     }
 

@@ -219,6 +219,7 @@
                           RowStyle="{StaticResource DataGridRowStyle}"
                           RowEditEnding="MoviesDataGrid_RowEditEnding"
                           KeyDown="MoviesDataGrid_KeyDown"
+                          Sorting="MoviesDataGrid_Sorting"
                           ScrollViewer.VerticalScrollBarVisibility="Auto"
                           ScrollViewer.HorizontalScrollBarVisibility="Auto">
 
@@ -230,7 +231,7 @@
                                 <DataGridTextColumn Header="Title"
                                                     Binding="{Binding Title}"
                                                     Width="*"
-                                                    CanUserSort="False"/>
+                                                    CanUserSort="True"/>
 
                                 <DataGridTextColumn Header="Genre"
                                                     Binding="{Binding Genre}"
@@ -240,7 +241,7 @@
                                                     Binding="{Binding Director}"
                                                     CanUserSort="False"/>
 
-                                <DataGridTextColumn Header="Year"
+                                <DataGridTextColumn Header="ReleaseYear"
                                                     Binding="{Binding ReleaseYear}"
                                                     CanUserSort="True"/>
 

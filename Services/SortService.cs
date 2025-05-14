@@ -7,7 +7,7 @@ public class SortService
     // Bubble sort by title
     public static IEnumerable<Movie> BubbleSortByTitle(IEnumerable<Movie> movies)
     {
-        List<Movie> sortedMovies = new();
+        List<Movie> sortedMovies = movies.ToList();
         int n = sortedMovies.Count;
 
         for (int i = 0; i < n - 1; i++)
