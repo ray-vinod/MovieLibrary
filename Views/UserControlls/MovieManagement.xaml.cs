@@ -46,14 +46,39 @@ public partial class MovieManagement : UserControl
     }
 
     // Linear search by title
+    // Binary search by ID (ensure sorted first)
     private void TitleSearchButton_Click(object sender, RoutedEventArgs e)
     {
-        NotifierService.Instance.UpdateStatus("Searchint movie by title...");
+        string searchTitle = TitleSearchBox.Input.Text.Trim();
+        string searchId = IdSearchBox.Input.Text.Trim();
+
+        IdSearchBox.Input.Text="";
+        TitleSearchBox.Input.Text = "";
+
+        IEnumerable<Movie> movies = _movieRepository.GetAllMovies();
+        List<Movie> searchedMovies = new();
+
+        if (!string.IsNullOrWhiteSpace(searchTitle))
+        {
+            searchedMovies = SearchService.SearchMoviesByTitle(movies, searchTitle).ToList();
+
+            NotifierService.Instance.UpdateStatus("Searching movie by TITLE using Linear method.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(searchId))
+        {
+            var searchedMovie = SearchService.SearchMovieById(movies, searchId);
+            searchedMovies.Add(searchedMovie!);
+
+            NotifierService.Instance.UpdateStatus("Searching movie by ID using Binary method.");
+        }
+
+        MoviesDataGrid.ItemsSource = searchedMovies;
     }
 
-    // Binary search by ID (ensure sorted first)
-    private void IdSearchButton_Click(object sender, RoutedEventArgs e)
+    private void RefreshButton_Click(object sender, RoutedEventArgs e)
     {
+        RefreshDataGrid();
     }
 
     // Bubble sort by title

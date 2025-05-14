@@ -24,6 +24,7 @@
     <None Remove="Assets\cinema.jpg" />
     <None Remove="Assets\cancel.png" />
     <None Remove="Assets\search.png" />
+    <None Remove="Assets\reload.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -70,6 +71,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\search.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\reload.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

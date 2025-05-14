@@ -59,6 +59,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- Movie Search Controls -->
@@ -120,12 +121,12 @@
                                                                      Placeholder="Search by ID"
                                                                      Margin="0,0,20,10"/>
                                         <Button x:Name="IdSearchButton"
-                                                Click="IdSearchButton_Click"
+                                                Click="TitleSearchButton_Click"
                                                 Width="150"
-                                                Padding="5"
+                                                Padding="8"
                                                 FontWeight="Bold"
                                                 Margin="0,0,20,10"
-                                                Background="#c4FBD1"
+                                                Background="#6ccc96"
                                                 HorizontalAlignment="Right">
                                                 <StackPanel Orientation="Horizontal"
                                                             HorizontalAlignment="Center">
@@ -156,6 +157,28 @@
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center">
                                 <Image Source="/assets/add.png"
+                                       Width="16"
+                                       Height="16"
+                                       Margin="0,0,5,0"/>
+                                <TextBlock Text="Add New"
+                                           VerticalAlignment="Center"/>
+                        </StackPanel>
+                </Button>
+
+                <Button x:Name="RefreshButton"
+                        Grid.Row="1"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="10"
+                        Width="100"
+                        Padding="5,10"
+                        FontWeight="Bold"
+                        Background="#aaf542"
+                        Click="RefreshButton_Click">
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                                <Image Source="/assets/reload.png"
                                        Width="16"
                                        Height="16"
                                        Margin="0,0,5,0"/>
@@ -243,5 +266,8 @@
                                 </DataGridTemplateColumn>
                         </DataGrid.Columns>
                 </DataGrid>
+
+                <!-- Navigation -->
+
         </Grid>
 </UserControl>

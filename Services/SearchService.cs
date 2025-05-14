@@ -5,7 +5,7 @@ namespace MovieLibrary.Services;
 public class SearchService
 {
     // Linear search for movies based on title
-    public static IEnumerable<Movie> SearchMovies(IEnumerable<Movie> movies, string title)
+    public static IEnumerable<Movie> SearchMoviesByTitle(IEnumerable<Movie> movies, string title)
     {
         if (string.IsNullOrWhiteSpace(title))
         {
