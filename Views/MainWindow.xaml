@@ -111,9 +111,9 @@
                                 </MenuItem.Icon>
                         </MenuItem>
 
-                        <MenuItem Header="Movies"
+                        <MenuItem Header="Movie Management"
                                   Style="{StaticResource SideMenuItemStyle}"
-                                  Click="Movies_Click">
+                                  Click="MovieManagement_Click">
                                 <MenuItem.Icon>
                                         <Image Source="pack://application:,,,/Assets/movie.png"
                                                Style="{StaticResource MenuIconStyle}"/>

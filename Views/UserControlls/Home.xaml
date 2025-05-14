@@ -9,13 +9,13 @@
 
     <Grid>
         <!-- Welcome Text -->
-        <TextBlock Text="Welcome to the Movie Library!"
+        <TextBlock Text="Welcome to the Movie Library"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Top"
                    FontSize="24"
                    FontWeight="Bold"
                    Foreground="DarkBlue"
-                   Margin="0,100,0,0"/>
+                   Margin="0,20,0,100"/>
 
         <!-- Image Control -->
         <Image x:Name="PictureBox1"

@@ -31,7 +31,7 @@ public class MovieRepository
 
     public IEnumerable<Movie> GetAllMovies()
     {
-        return _movies;
+        return _movies.ToList();
     }
 
     public void UpdateMovie(Movie movie)
@@ -46,6 +46,10 @@ public class MovieRepository
                 _movies.AddLast(movie);
             }
         }
+        else
+        {
+            throw new KeyNotFoundException($"Movie with ID {movie.Id} does not exist.");
+        }
     }
 
     public void DeleteMovie(string id)
@@ -57,6 +61,10 @@ public class MovieRepository
                 _movies.Remove(movie);
                 _movieLookup.Remove(id);
             }
+        }
+        else
+        {
+            throw new KeyNotFoundException($"Movie with ID {id} does not exist.");
         }
     }
 }

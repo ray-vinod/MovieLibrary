@@ -18,9 +18,10 @@ public partial class MainWindow : Window
         StatusText.Text = "Welcome to Movie Library!";
     }
 
-    private void Movies_Click(object sender, RoutedEventArgs e)
+    private void MovieManagement_Click(object sender, RoutedEventArgs e)
     {
-
+        MainContent.Content = new MovieManagement();
+        StatusText.Text = "Movie Management";
     }
 
 
@@ -41,7 +42,7 @@ public partial class MainWindow : Window
 
     private void HowToUse_Click(object sender, RoutedEventArgs e)
     {
-        
+
     }
 
 
