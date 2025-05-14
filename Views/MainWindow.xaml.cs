@@ -38,10 +38,10 @@ public partial class MainWindow : Window
         StatusText.Text = $"App Status:- Movie Management";
     }
 
-
-    private void UserAddNew_Click(object sender, RoutedEventArgs e)
+    private void UserManagement_Click(object sender, RoutedEventArgs e)
     {
-
+        MainContent.Content = new UserManagement();
+        StatusText.Text = $"App Status:- Movie Management";
     }
 
     private void BorrowHistory_Click(object sender, RoutedEventArgs e)
@@ -50,10 +50,6 @@ public partial class MainWindow : Window
         StatusText.Text = $"App Status:- Borrow Return managemen";
     }
 
-    private void UserList_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
 
     private void HowToUse_Click(object sender, RoutedEventArgs e)
     {

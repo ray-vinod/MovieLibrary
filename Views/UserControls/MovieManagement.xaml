@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MovieLibrary.Views.UserControls"
-             xmlns:CustomControlls="clr-namespace:MovieLibrary.Views.CustomControls"
+             xmlns:CustomControls="clr-namespace:MovieLibrary.Views.CustomControls"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800"
@@ -86,7 +86,7 @@
                                             VerticalAlignment="Top"
                                             Margin="0,10,50,0">
 
-                                        <CustomControlls:FormTextBox x:Name="TitleSearchBox"
+                                        <CustomControls:FormTextBox x:Name="TitleSearchBox"
                                                                      Width="250"
                                                                      Placeholder="Search by Title"
                                                                      Margin="0,0,20,10"/>
@@ -118,10 +118,11 @@
                                             VerticalAlignment="Top"
                                             Margin="0,10,50,0">
 
-                                        <CustomControlls:FormTextBox x:Name="IdSearchBox"
+                                        <CustomControls:FormTextBox x:Name="IdSearchBox"
                                                                      Width="150"
                                                                      Placeholder="Search by ID"
                                                                      Margin="0,0,20,10"/>
+                                                                     
                                         <Button x:Name="IdSearchButton"
                                                 Click="TitleSearchButton_Click"
                                                 Width="150"

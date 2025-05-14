@@ -127,18 +127,9 @@
                                                Style="{StaticResource MenuIconStyle}"/>
                                 </MenuItem.Icon>
 
-                                <MenuItem Header="Add New"
+                                <MenuItem Header="User Management"
                                           Style="{StaticResource SideMenuItemStyle}"
-                                          Click="UserAddNew_Click">
-                                        <MenuItem.Icon>
-                                                <Image Source="pack://application:,,,/Assets/add.png"
-                                                       Style="{StaticResource MenuIconStyle}"/>
-                                        </MenuItem.Icon>
-                                </MenuItem>
-
-                                <MenuItem Header="All Users"
-                                          Style="{StaticResource SideMenuItemStyle}"
-                                          Click="UserList_Click">
+                                          Click="UserManagement_Click">
                                         <MenuItem.Icon>
                                                 <Image Source="pack://application:,,,/Assets/list.png"
                                                        Style="{StaticResource MenuIconStyle}"/>
