@@ -10,7 +10,7 @@ namespace MovieLibrary.Views.UserControlls;
 
 public partial class MovieManagement : UserControl
 {
-    private MovieRepository? _movieRepository;
+    private MovieRepository _movieRepository;
 
     public MovieManagement()
     {
@@ -23,7 +23,13 @@ public partial class MovieManagement : UserControl
 
     private void RefreshDataGrid()
     {
-        MoviesDataGrid.ItemsSource = _movieRepository?.GetAllMovies().ToList();
+        var movies = _movieRepository.GetAllMovies().ToList();
+        MoviesDataGrid.ItemsSource = movies;
+
+        if (movies.Count == 0)
+        {
+            NotifierService.Instance.UpdateStatus($"There is no movie");
+        }
     }
 
     private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -42,7 +48,7 @@ public partial class MovieManagement : UserControl
     // Linear search by title
     private void TitleSearchButton_Click(object sender, RoutedEventArgs e)
     {
-        NotifierService.Instance.UpdateStatus("Loading movies...");
+        NotifierService.Instance.UpdateStatus("Searchint movie by title...");
     }
 
     // Binary search by ID (ensure sorted first)
@@ -121,12 +127,28 @@ public partial class MovieManagement : UserControl
                     if (selectedRow != null)
                     {
                         var editButton = Helpers.DataGrid.FindButtonInRow(selectedRow, "EditButton");
+                        var deleteButton = Helpers.DataGrid.FindButtonInRow(selectedRow, "DeleteButton");
+
+                        if (deleteButton != null && deleteButton.Content.Equals("Delete"))
+                        {
+                            NotifierService.Instance.UpdateStatus($"The movie '{movie.Title}' is edited.");
+                        }
+                        else
+                        {
+                            NotifierService.Instance.UpdateStatus($"New movie '{movie.Title}' is added.");
+                        }
 
                         if (editButton != null)
                         {
                             editButton.Content = "Edit";
-                            MoviesDataGrid.IsReadOnly = true;
                         }
+
+                        if (deleteButton != null)
+                        {
+                            deleteButton.Content = "Delete";
+                        }
+
+                        MoviesDataGrid.IsReadOnly = true;
                     }
                 }), DispatcherPriority.Background);
             }
@@ -135,50 +157,64 @@ public partial class MovieManagement : UserControl
 
     private void Add_Click(object sender, RoutedEventArgs e)
     {
-        var newMovie = new Movie
+        try
         {
-            Id = Repository.Instance.GenerateNewMovieId(),
-            Title = "",
-            Genre = "",
-            Director = "",
-            ReleaseYear = 0,
-            IsAvailable = true,
-        };
-
-        _movieRepository?.AddMovie(newMovie);
-
-        RefreshDataGrid();
-
-        MoviesDataGrid.IsReadOnly = false;
-        MoviesDataGrid.CanUserAddRows = false;
-
-        // Scroll to the new row and focus on it
-        MoviesDataGrid.ScrollIntoView(newMovie);
-        Dispatcher.BeginInvoke(new Action(() =>
-        {
-            var movies = _movieRepository?.GetAllMovies();
-            var lastRowIndex = movies!.Count() - 1;
-            var lastRow = MoviesDataGrid.ItemContainerGenerator.ContainerFromIndex(lastRowIndex) as DataGridRow;
-
-            if (lastRow != null)
+            var newMovie = new Movie
             {
-                MoviesDataGrid.CurrentCell = new DataGridCellInfo(newMovie, MoviesDataGrid.Columns[1]);
-                MoviesDataGrid.BeginEdit();
+                Id = Repository.Instance.GenerateNewMovieId(),
+                Title = "Title",
+                Genre = "Genre",
+                Director = "UnKnown",
+                ReleaseYear = DateTime.Now.Year,
+                IsAvailable = true,
+            };
 
-                var editButton = Helpers.DataGrid.FindButtonInRow(lastRow, "EditButton");
-                var deleteButton = Helpers.DataGrid.FindButtonInRow(lastRow, "DeleteButton");
+            NotifierService.Instance.UpdateStatus($"{newMovie.Id}");
 
-                if (editButton != null)
+            _movieRepository.AddMovie(newMovie);
+
+            RefreshDataGrid();
+
+            MoviesDataGrid.IsReadOnly = false;
+            MoviesDataGrid.CanUserAddRows = false;
+
+            // Scroll to the new row and focus on it (important for the visual tree)
+            MoviesDataGrid.ScrollIntoView(newMovie);
+
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var movies = _movieRepository.GetAllMovies();
+                var lastRowIndex = movies.Count() - 1;
+
+                var lastRow = MoviesDataGrid.ItemContainerGenerator.ContainerFromIndex(lastRowIndex) as DataGridRow;
+
+                if (lastRow != null)
                 {
-                    editButton.Content = "Save";
-                }
+                    MoviesDataGrid.CurrentCell = new DataGridCellInfo(newMovie, MoviesDataGrid.Columns[1]);
+                    MoviesDataGrid.BeginEdit();
 
-                if (deleteButton != null)
-                {
-                    deleteButton.Content = "Cancel";
+                    var editButton = Helpers.DataGrid.FindButtonInRow(lastRow, "EditButton");
+                    var deleteButton = Helpers.DataGrid.FindButtonInRow(lastRow, "DeleteButton");
+
+                    if (editButton != null)
+                    {
+                        editButton.Content = "Save";
+                    }
+
+                    if (deleteButton != null)
+                    {
+                        deleteButton.Content = "Cancel";
+                    }
                 }
-            }
-        }), DispatcherPriority.Background);
+            }), DispatcherPriority.Background);
+
+            // NotifierService.Instance.UpdateStatus($"New movie '{newMovie.Title}' is added.");
+        }
+        catch (Exception ex)
+        {
+            NotifierService.Instance.UpdateStatus($"An error occurred while adding the movie: {ex.Message}");
+            MessageBox.Show($"An error occurred while adding the movie: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     private void MoviesDataGrid_KeyDown(object sender, KeyEventArgs e)
@@ -195,8 +231,19 @@ public partial class MovieManagement : UserControl
 
     private void MovieRemove(Movie movie)
     {
-        _movieRepository?.DeleteMovie(movie.Id!);
+        try
+        {
+            _movieRepository.DeleteMovie(movie.Id!);
 
-        RefreshDataGrid();
+            NotifierService.Instance.UpdateStatus($"The movie '{movie.Title}' has been deleted.");
+
+            RefreshDataGrid();
+        }
+        catch (Exception ex)
+        {
+            NotifierService.Instance.UpdateStatus($"An error occurred while deleting the movie '{movie.Title}'.");
+            MessageBox.Show($"An error occurred while deleting the movie: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
     }
 }

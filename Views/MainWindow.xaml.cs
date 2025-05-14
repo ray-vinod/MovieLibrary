@@ -17,7 +17,7 @@ public partial class MainWindow : Window
 
     private void OnStatusUpdated(string message)
     {
-        Dispatcher.Invoke(() => StatusText.Text = message);
+        Dispatcher.Invoke(() => StatusText.Text = $"App Status:- {message}");
     }
 
     protected override void OnClosed(EventArgs e)
