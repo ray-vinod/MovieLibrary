@@ -36,6 +36,8 @@
                                 Value="Center"/>
                         <Setter Property="HorizontalContentAlignment"
                                 Value="Center"/>
+                        <Setter Property="Height"
+                                Value="40"/>
                 </Style>
 
                 <!-- Style for DataGrid Rows -->
@@ -208,12 +210,17 @@
                           IsReadOnly="True"
                           SelectionMode="Single"
                           SelectionUnit="FullRow"
+                          Height="490"
                           RowHeight="32"
+                          MaxHeight="490"
+                          MinHeight="490"
                           Background="White"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                           RowStyle="{StaticResource DataGridRowStyle}"
                           RowEditEnding="MoviesDataGrid_RowEditEnding"
-                          KeyDown="MoviesDataGrid_KeyDown">
+                          KeyDown="MoviesDataGrid_KeyDown"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto">
 
                         <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID"
@@ -267,7 +274,25 @@
                         </DataGrid.Columns>
                 </DataGrid>
 
-                <!-- Navigation -->
-
+                <!-- Pagination Controls -->
+                <StackPanel Grid.Row="3"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,5,0,30">
+                        <Button x:Name="PrevPageButton"
+                                Content="Previous"
+                                Width="80"
+                                Margin="5"
+                                Click="PrevPageButton_Click"/>
+                        <TextBlock x:Name="PaginationTextBlock"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold"
+                                   Margin="10,0"/>
+                        <Button x:Name="NextPageButton"
+                                Content="Next"
+                                Width="80"
+                                Margin="5"
+                                Click="NextPageButton_Click"/>
+                </StackPanel>
         </Grid>
 </UserControl>

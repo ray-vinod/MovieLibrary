@@ -12,21 +12,62 @@ public partial class MovieManagement : UserControl
 {
     private MovieRepository _movieRepository;
 
+    private int _currentPage = 1;
+    private int _pageSize = 12;
+    private int _totalPages = 1;
+
     public MovieManagement()
     {
         InitializeComponent();
 
         _movieRepository = Repository.Instance.MovieRepo;
 
-        RefreshDataGrid();
+        //RefreshDataGrid();
+
+        UpdatePagination();
+    }
+
+    private void UpdatePagination()
+    {
+        var allMovies = _movieRepository.GetAllMovies().ToList();
+        _totalPages = (int)Math.Ceiling(allMovies.Count / (double)_pageSize);
+        if (_currentPage > _totalPages) _currentPage = _totalPages == 0 ? 1 : _totalPages;
+
+        var pagedMovies = allMovies
+            .Skip((_currentPage - 1) * _pageSize)
+            .Take(_pageSize)
+            .ToList();
+
+        MoviesDataGrid.ItemsSource = pagedMovies;
+
+        PaginationTextBlock.Text = $"Page {_currentPage} of {_totalPages}";
+        PrevPageButton.IsEnabled = _currentPage > 1;
+        NextPageButton.IsEnabled = _currentPage < _totalPages;
+    }
+
+    private void PrevPageButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_currentPage > 1)
+        {
+            _currentPage--;
+            UpdatePagination();
+        }
+    }
+
+    private void NextPageButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_currentPage < _totalPages)
+        {
+            _currentPage++;
+            UpdatePagination();
+        }
     }
 
     private void RefreshDataGrid()
     {
-        var movies = _movieRepository.GetAllMovies().ToList();
-        MoviesDataGrid.ItemsSource = movies;
-
-        if (movies.Count == 0)
+        UpdatePagination();
+        var allMovies = _movieRepository.GetAllMovies().ToList();
+        if (allMovies.Count == 0)
         {
             NotifierService.Instance.UpdateStatus($"There is no movie");
         }
@@ -52,7 +93,7 @@ public partial class MovieManagement : UserControl
         string searchTitle = TitleSearchBox.Input.Text.Trim();
         string searchId = IdSearchBox.Input.Text.Trim();
 
-        IdSearchBox.Input.Text="";
+        IdSearchBox.Input.Text = "";
         TitleSearchBox.Input.Text = "";
 
         IEnumerable<Movie> movies = _movieRepository.GetAllMovies();
