@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using MovieLibrary.Services;
-using MovieLibrary.Views.UserControlls;
+using MovieLibrary.Views.UserControls;
 
 namespace MovieLibrary.Views;
 

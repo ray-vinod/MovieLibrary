@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using MovieLibrary.Data;
 using MovieLibrary.Services;
 
-namespace MovieLibrary.Views.UserControlls;
+namespace MovieLibrary.Views.UserControls;
 
 public partial class BorrowReturn : UserControl
 {

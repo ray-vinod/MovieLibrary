@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace MovieLibrary.Views.CustomControlls;
+namespace MovieLibrary.Views.CustomControls;
 public partial class FormTextBox : UserControl, INotifyPropertyChanged
 {
 	public FormTextBox()

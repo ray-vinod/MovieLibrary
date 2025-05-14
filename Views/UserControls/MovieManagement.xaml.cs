@@ -7,7 +7,7 @@ using MovieLibrary.Data;
 using MovieLibrary.Models;
 using MovieLibrary.Services;
 
-namespace MovieLibrary.Views.UserControlls;
+namespace MovieLibrary.Views.UserControls;
 
 public partial class MovieManagement : UserControl
 {

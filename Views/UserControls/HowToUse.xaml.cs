@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace MovieLibrary.Views.UserControlls;
+namespace MovieLibrary.Views.UserControls;
 
 public partial class HowToUse : UserControl
 {

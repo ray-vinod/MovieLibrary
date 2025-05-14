@@ -2,7 +2,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace MovieLibrary.Views.UserControlls;
+namespace MovieLibrary.Views.UserControls;
 
 public partial class Home : UserControl
 {
