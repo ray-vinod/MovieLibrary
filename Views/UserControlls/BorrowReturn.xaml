@@ -1,0 +1,162 @@
+<UserControl x:Class="MovieLibrary.Views.UserControlls.BorrowReturn"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MovieLibrary.Views.UserControlls"
+             xmlns:CustomControlls="clr-namespace:MovieLibrary.Views.CustomControlls"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+
+    <!-- Buttons style -->
+    <UserControl.Resources>
+        <Style x:Key="EnhancedActionButtonStyle"
+               TargetType="Button">
+            <Setter Property="Width"
+                    Value="120"/>
+            <Setter Property="Padding"
+                    Value="10,15"/>
+            <Setter Property="FontWeight"
+                    Value="Bold"/>
+            <Setter Property="Height"
+                    Value="40"/>
+            <Setter Property="Margin"
+                    Value="15,10,15,10"/>
+            <Setter Property="HorizontalAlignment"
+                    Value="Center"/>
+            <Setter Property="VerticalAlignment"
+                    Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="4"
+                                BorderBrush="#DDD"
+                                BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+        </Style>
+    </UserControl.Resources>
+
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Borrow/Return Controls -->
+        <StackPanel Grid.Row="0"
+                    Orientation="Vertical">
+            <StackPanel x:Name="TextBoxPanel"
+                        Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Margin="0,10,50,0">
+
+                <CustomControlls:FormTextBox x:Name="UserIdBox"
+                                             Width="200"
+                                             Placeholder="User ID"
+                                             Margin="0,0,20,10"/>
+
+                <CustomControlls:FormTextBox x:Name="MovieIdBox"
+                                             Width="200"
+                                             Placeholder="Movie ID"
+                                             Margin="0,0,20,10"/>
+            </StackPanel>
+
+            <StackPanel x:Name="ButtonPanel"
+                        Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Margin="0,10,50,0">
+
+                <!-- Borrow Button-->
+                <Button x:Name="BorrowButton"
+                        Style="{StaticResource EnhancedActionButtonStyle}"
+                        Click="BorrowButton_Click"
+                        Background="#ebb434">
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <Image Source="/assets/search.png"
+                               Width="24"
+                               Height="24"
+                               Margin="0,0,5,0"/>
+                        <TextBlock Text="Borrow"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                </Button>
+
+                <!-- Reload button -->
+                <Button x:Name="RefreshButton"
+                        Style="{StaticResource EnhancedActionButtonStyle}"
+                        Background="#4fa854"
+                        Click="RefreshButton_Click">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <Image Source="/assets/reload.png"
+                               Width="24"
+                               Height="24"
+                               Margin="0,0,5,0"/>
+                        <TextBlock Text="Add New"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <!-- Return Button -->
+                <Button x:Name="ReturnButton"
+                        Style="{StaticResource EnhancedActionButtonStyle}"
+                        Background="#eb5e34"
+                        Click="ReturnButton_Click">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <Image Source="/assets/search.png"
+                               Width="24"
+                               Height="24"
+                               Margin="0,0,5,0"/>
+                        <TextBlock Text="Return"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Display Borrow Records -->
+        <DataGrid Name="BorrowRecordsDataGrid"
+                  Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Margin="0,0,0,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Record ID"
+                                    Binding="{Binding RecordID}"
+                                    Width="*"/>
+                <DataGridTextColumn Header="Movie ID"
+                                    Binding="{Binding MovieID}"
+                                    Width="*"/>
+                <DataGridTextColumn Header="User ID"
+                                    Binding="{Binding UserID}"
+                                    Width="*"/>
+                <DataGridTextColumn Header="Borrow Date"
+                                    Binding="{Binding BorrowDate}"
+                                    Width="*"/>
+                <DataGridTextColumn Header="Return Date"
+                                    Binding="{Binding ReturnDate}"
+                                    Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</UserControl>

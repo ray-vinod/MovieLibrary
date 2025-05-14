@@ -29,13 +29,13 @@ public partial class MainWindow : Window
     private void Home_Click(object sender, RoutedEventArgs e)
     {
         MainContent.Content = new Home();
-        StatusText.Text = "Welcome to Movie Library!";
+        StatusText.Text = $"App Status:- Welcome to Movie Library!";
     }
 
     private void MovieManagement_Click(object sender, RoutedEventArgs e)
     {
         MainContent.Content = new MovieManagement();
-        StatusText.Text = "Movie Management";
+        StatusText.Text = $"App Status:- Movie Management";
     }
 
 
@@ -46,7 +46,8 @@ public partial class MainWindow : Window
 
     private void BorrowHistory_Click(object sender, RoutedEventArgs e)
     {
-
+        MainContent.Content = new BorrowReturn();
+        StatusText.Text = $"App Status:- Borrow Return managemen";
     }
 
     private void UserList_Click(object sender, RoutedEventArgs e)

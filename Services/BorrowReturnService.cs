@@ -1,5 +1,4 @@
 using MovieLibrary.Data;
-using MovieLibrary.Helpers;
 using MovieLibrary.Models;
 
 namespace MovieLibrary.Services;
@@ -7,13 +6,11 @@ namespace MovieLibrary.Services;
 public class BorrowReturnService
 {
     private readonly MovieRepository _movieRepository;
-    private readonly BorrowRecordRepository _recordRepository;
     public List<BorrowRecord> BorrowRecords { get; set; } = new();
 
-    public BorrowReturnService(MovieRepository movieRepository, BorrowRecordRepository recordRepository)
+    public BorrowReturnService(MovieRepository movieRepository)
     {
         _movieRepository = movieRepository;
-        _recordRepository = recordRepository;
     }
 
     public string BorrowMovie(string id, User user)
@@ -84,10 +81,9 @@ public class BorrowReturnService
         {
             var nextUserId = movie.WaitingList.Dequeue();
             movie.IsAvailable = false;
-            var records = _recordRepository.GetAllBorrowRecord();
             BorrowRecord record = new BorrowRecord
             {
-                Id = GenerateId.BorrowRecordId(records),
+                Id = Repository.Instance.GenerateNewRecordId(),
                 MovieId = id,
                 UserId = nextUserId,
                 BorrowDate = DateTime.Now,
