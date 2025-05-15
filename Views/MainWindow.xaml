@@ -153,6 +153,14 @@
                                         </MenuItem.Icon>
                                 </MenuItem>
                         </MenuItem>
+                        <MenuItem Header="Import/Export Data"
+                                  Style="{StaticResource SideMenuItemStyle}"
+                                  Click="ImportExport_Click">
+                                <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/Assets/showtime.png"
+                                               Style="{StaticResource MenuIconStyle}"/>
+                                </MenuItem.Icon>
+                        </MenuItem>
                         <MenuItem Header="Help"
                                   Style="{StaticResource SideMenuItemStyle}">
                                 <MenuItem.Icon>
