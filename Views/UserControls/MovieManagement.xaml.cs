@@ -23,8 +23,6 @@ public partial class MovieManagement : UserControl
 
         _movieRepository = Repository.Instance.MovieRepo;
 
-        //RefreshDataGrid();
-
         UpdatePagination();
     }
 
@@ -32,6 +30,7 @@ public partial class MovieManagement : UserControl
     {
         var allMovies = _movieRepository.GetAllMovies().ToList();
         _totalPages = (int)Math.Ceiling(allMovies.Count / (double)_pageSize);
+
         if (_currentPage > _totalPages) _currentPage = _totalPages == 0 ? 1 : _totalPages;
 
         var pagedMovies = allMovies
@@ -74,19 +73,6 @@ public partial class MovieManagement : UserControl
         }
     }
 
-    private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
-    {
-        if (e.NewSize.Width < 600)
-        {
-            TitleSearchPanel.Orientation = Orientation.Vertical;
-            TitleSearchPanel.HorizontalAlignment = HorizontalAlignment.Center;
-        }
-        else
-        {
-            TitleSearchPanel.Orientation = Orientation.Horizontal;
-        }
-    }
-
     // Linear search by title
     // Binary search by ID (ensure sorted first)
     private void TitleSearchButton_Click(object sender, RoutedEventArgs e)
@@ -121,16 +107,6 @@ public partial class MovieManagement : UserControl
     private void RefreshButton_Click(object sender, RoutedEventArgs e)
     {
         RefreshDataGrid();
-    }
-
-    // Bubble sort by title
-    private void SortTitle_Click(object sender, RoutedEventArgs e)
-    {
-    }
-
-    // Merge sort by ReleaseYear
-    private void SortReleaseYear_Click(object sender, RoutedEventArgs e)
-    {
     }
 
     private void Edit_Click(object sender, RoutedEventArgs e)
@@ -324,7 +300,6 @@ public partial class MovieManagement : UserControl
         catch (Exception)
         {
             NotifierService.Instance.UpdateStatus($"An error occurred while adding the movie");
-            //MessageBox.Show($"An error occurred while adding the movie: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -353,7 +328,6 @@ public partial class MovieManagement : UserControl
         catch (Exception)
         {
             NotifierService.Instance.UpdateStatus($"An error occurred while deleting the movie '{movie.Title}'.");
-            //MessageBox.Show($"An error occurred while deleting the movie: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
     }

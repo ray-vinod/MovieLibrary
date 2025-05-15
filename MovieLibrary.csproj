@@ -13,8 +13,11 @@
   <ItemGroup>
     <None Remove="Assets\about.jpg" />
     <None Remove="Assets\add.png" />
+    <None Remove="Assets\download.png" />
+    <None Remove="Assets\export.png" />
     <None Remove="Assets\home.png" />
     <None Remove="Assets\idea.png" />
+    <None Remove="Assets\import.png" />
     <None Remove="Assets\list.png" />
     <None Remove="Assets\movie.png" />
     <None Remove="Assets\pencil.png" />
@@ -34,6 +37,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\app.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\download.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\export.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\import.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\showtime.png">

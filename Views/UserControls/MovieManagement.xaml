@@ -7,8 +7,7 @@
              xmlns:CustomControls="clr-namespace:MovieLibrary.Views.CustomControls"
              mc:Ignorable="d"
              d:DesignHeight="450"
-             d:DesignWidth="800"
-             SizeChanged="UserControl_SizeChanged">
+             d:DesignWidth="800">
 
         <UserControl.Resources>
 
@@ -122,7 +121,7 @@
                                                                      Width="150"
                                                                      Placeholder="Search by ID"
                                                                      Margin="0,0,20,10"/>
-                                                                     
+
                                         <Button x:Name="IdSearchButton"
                                                 Click="TitleSearchButton_Click"
                                                 Width="150"

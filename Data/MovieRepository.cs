@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Globalization;
 using MovieLibrary.Models;
 
 namespace MovieLibrary.Data;
@@ -18,6 +20,13 @@ public class MovieRepository
         if (string.IsNullOrWhiteSpace(movie.Id) || string.IsNullOrWhiteSpace(movie.Title))
         {
             throw new ArgumentException("Movie ID and Title cannot be empty.");
+        }
+
+        var oldMovie = _movies.FirstOrDefault(x => string.Equals(x.Title!.ToLower(), movie.Title.ToLower()));
+
+        if (oldMovie != null && oldMovie.ReleaseYear == movie.ReleaseYear)
+        {
+            throw new ArgumentException($"Movie Title and Release Year are same ");
         }
 
         _movieLookup.Add(movie.Id, movie);

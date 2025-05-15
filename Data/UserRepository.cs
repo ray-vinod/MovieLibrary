@@ -5,10 +5,7 @@ namespace MovieLibrary.Data;
 
 public class UserRepository
 {
-    // Using a Hashtable for fast lookups by ID
     private readonly Hashtable _userLookup = new();
-
-    // LinkedList to maintain the order of users
     private readonly LinkedList<User> _users = new();
 
     public void AddUser(User user)
