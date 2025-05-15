@@ -313,7 +313,6 @@ public partial class MovieManagement : UserControl
         catch (Exception)
         {
             NotifierService.Instance.UpdateStatus($"An error occurred while adding the movie");
-            //MessageBox.Show($"An error occurred while adding the movie: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
