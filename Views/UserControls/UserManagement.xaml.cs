@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MovieLibrary.Data;
+using MovieLibrary.Helpers;
 using MovieLibrary.Models;
 using MovieLibrary.Services;
 
@@ -195,14 +196,4 @@ public partial class UserManagement : UserControl
         }
     }
 
-}
-
-// extract to individual class
-public class RelayCommand : ICommand
-{
-    private readonly Action<object, object> _execute;
-    public RelayCommand(Action<object, object> execute) => _execute = execute;
-    public bool CanExecute(object? parameter) => true;
-    public void Execute(object? parameter) => _execute(null!, parameter ?? new object());
-    public event EventHandler? CanExecuteChanged;
 }
