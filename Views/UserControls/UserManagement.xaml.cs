@@ -197,6 +197,7 @@ public partial class UserManagement : UserControl
 
 }
 
+// extract to individual class
 public class RelayCommand : ICommand
 {
     private readonly Action<object, object> _execute;
