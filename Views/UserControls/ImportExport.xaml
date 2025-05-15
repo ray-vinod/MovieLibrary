@@ -13,7 +13,7 @@
                 Padding="10"
                 BorderBrush="#B0C4DE"
                 BorderThickness="1"
-                Margin="0,0,0,30">
+                Margin="0,0,0,80">
             <StackPanel>
 
                 <!-- Info Text -->
@@ -37,8 +37,8 @@
                             HorizontalAlignment="Center"
                             Margin="0,0,0,25">
 
-                    <Button x:Name="ImportButton"
-                            Width="120"
+                    <Button x:Name="ImportMovieButton"
+                            Width="200"
                             Padding="15"
                             Height="40"
                             Margin="0,0,40,0"
@@ -47,12 +47,12 @@
                             FontWeight="Bold"
                             BorderThickness="0"
                             Cursor="Hand"
-                            Click="ImportButton_Click">
+                            Click="ImportMovieButton_Click">
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center">
-                            <Image Source="/assets/add.png"
-                                   Width="36"
-                                   Height="36"
+                            <Image Source="/assets/import.png"
+                                   Width="16"
+                                   Height="16"
                                    Margin="0,0,5,0"/>
                             <TextBlock Text="Import Data"
                                        VerticalAlignment="Center"/>
@@ -60,8 +60,8 @@
                     </Button>
 
 
-                    <Button x:Name="ExportButton"
-                            Width="120"
+                    <Button x:Name="ExportMovieButton"
+                            Width="200"
                             Padding="15"
                             Height="40"
                             Margin="0,0,40,0"
@@ -70,10 +70,10 @@
                             FontWeight="Bold"
                             BorderThickness="0"
                             Cursor="Hand"
-                            Click="ExportButton_Click">
+                            Click="ExportMovieButton_Click">
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center">
-                            <Image Source="/assets/add.png"
+                            <Image Source="/assets/export.png"
                                    Width="16"
                                    Height="16"
                                    Margin="0,0,5,0"/>
