@@ -73,19 +73,6 @@ public partial class MovieManagement : UserControl
         }
     }
 
-    private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
-    {
-        if (e.NewSize.Width < 600)
-        {
-            TitleSearchPanel.Orientation = Orientation.Vertical;
-            TitleSearchPanel.HorizontalAlignment = HorizontalAlignment.Center;
-        }
-        else
-        {
-            TitleSearchPanel.Orientation = Orientation.Horizontal;
-        }
-    }
-
     // Linear search by title
     // Binary search by ID (ensure sorted first)
     private void TitleSearchButton_Click(object sender, RoutedEventArgs e)
