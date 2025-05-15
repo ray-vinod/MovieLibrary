@@ -9,7 +9,7 @@
         Title="Movie Library"
         d:DesignHeight="450"
         d:DesignWidth="800"
-        MinHeight="450"
+        MinHeight="650"
         MinWidth="800"
         Icon="pack://application:,,,/Assets/app.png">
         <Window.Resources>
@@ -152,6 +152,14 @@
                                                        Style="{StaticResource MenuIconStyle}"/>
                                         </MenuItem.Icon>
                                 </MenuItem>
+                        </MenuItem>
+                        <MenuItem Header="Import/Export Data"
+                                  Style="{StaticResource SideMenuItemStyle}"
+                                  Click="ImportExport_Click">
+                                <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/Assets/download.png"
+                                               Style="{StaticResource MenuIconStyle}"/>
+                                </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Help"
                                   Style="{StaticResource SideMenuItemStyle}">

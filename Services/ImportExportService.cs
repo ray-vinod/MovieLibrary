@@ -16,14 +16,12 @@ public class ImportExportService
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            // Ensure the directory exists
             var directory = Path.GetDirectoryName(filePath);
             if (directory != null && !Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
 
-            // Write the JSON to the specified file
             using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
             using var writer = new StreamWriter(fileStream);
             writer.Write(json);
@@ -48,7 +46,14 @@ public class ImportExportService
             using var reader = new StreamReader(fileStream);
             var json = reader.ReadToEnd();
 
-            return JsonSerializer.Deserialize<IEnumerable<Movie>>(json) ?? Enumerable.Empty<Movie>();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            var movies = JsonSerializer.Deserialize<IEnumerable<Movie>>(json, options) ?? Enumerable.Empty<Movie>();
+            return movies.ToList();
         }
         catch (Exception ex)
         {

@@ -26,6 +26,12 @@ public partial class MainWindow : Window
         base.OnClosed(e);
     }
 
+    public void ImportExport_Click(object sender, RoutedEventArgs e)
+    {
+        MainContent.Content = new ImportExport();
+        StatusText.Text = $"App Status:- Data import/export as json or from json";
+    }
+
     private void Home_Click(object sender, RoutedEventArgs e)
     {
         MainContent.Content = new Home();
