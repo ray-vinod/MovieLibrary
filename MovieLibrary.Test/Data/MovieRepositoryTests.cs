@@ -1,9 +1,7 @@
-using System;
-using Xunit;
-using System.Linq;
-using System.Collections.Generic;
 using MovieLibrary.Data;
 using MovieLibrary.Models;
+
+namespace MovieLibrary.Test.Data;
 
 public class MovieRepositoryTests
 {
