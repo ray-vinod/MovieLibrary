@@ -106,4 +106,11 @@ public class Repository
 
         return $"R{(maxId + 1):D3}";
     }
+
+    public void Reset()
+    {
+        MovieRepo = new MovieRepository();
+        UserRepo = new UserRepository();
+        RecordRepo = new BorrowRecordRepository();
+    }
 }
