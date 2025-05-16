@@ -151,7 +151,8 @@ public partial class UserManagement : UserControl
             NameBox.Input.Text = user.Name;
             FormHeading.Text = "Edit User";
             AddOrSaveButton.Content = "Save Changes";
-            AddOrSaveButton.Content = CreateButtonContent("Save Changes", "/assets/add.png");
+            AddOrSaveButton.Width = 145;
+			AddOrSaveButton.Content = CreateButtonContent("Save Changes", "/assets/add.png");
         }
     }
 
