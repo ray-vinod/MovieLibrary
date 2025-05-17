@@ -39,6 +39,19 @@ public partial class MainWindow : Window
 		base.OnClosed(e);
 	}
 
+	private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+	{
+		if (e.NewSize.Width < 600)
+		{
+			MainGrid.ColumnDefinitions[0].Width = new GridLength(60);
+		}
+		else
+		{
+			MainGrid.ColumnDefinitions[0].Width = new GridLength(200);
+		}
+	}
+
+
 	public void ImportExport_Click(object sender, RoutedEventArgs e)
 	{
 		MainContent.Content = new ImportExport();
