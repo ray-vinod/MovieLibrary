@@ -13,6 +13,7 @@
   <ItemGroup>
     <None Remove="Assets\about.jpg" />
     <None Remove="Assets\add.png" />
+    <None Remove="Assets\borrow.png" />
     <None Remove="Assets\download.png" />
     <None Remove="Assets\export.png" />
     <None Remove="Assets\home.png" />
@@ -37,6 +38,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\app.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\borrow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\download.png">
