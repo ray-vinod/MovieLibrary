@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MovieLibrary.Data;
@@ -15,7 +15,7 @@ public partial class UserManagement : UserControl
     private User? _editingUser = null;
 
     private int _currentPage = 1;
-    private int _pageSize = 10;
+    private int _pageSize = 5;
     private int _totalPages = 1;
 
 
@@ -58,62 +58,70 @@ public partial class UserManagement : UserControl
     }
 
 
-    private void LoadUsers()
+    private void LoadUsers(bool goToLastPage=false)
     {
         _allUsers = _repository.GetAllUsers().ToList();
         _totalPages = (_allUsers.Count + _pageSize - 1) / _pageSize;
+
+        if(goToLastPage)
+        {
+            _currentPage = _totalPages;
+        }
 
         DisplayPage(_currentPage);
     }
 
 
-    private void AddOrSaveButton_Click(object sender, RoutedEventArgs e)
-    {
-        var name = NameBox.Input.Text.Trim();
+	private void AddOrSaveButton_Click(object sender, RoutedEventArgs e)
+	{
+		var name = NameBox.Input.Text.Trim();
 
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            NotifierService.Instance.UpdateStatus("ID and Name are required.");
-            return;
-        }
+		if (string.IsNullOrWhiteSpace(name))
+		{
+			NotifierService.Instance.UpdateStatus("ID and Name are required.");
+			return;
+		}
 
-        if (_editingUser == null)
-        {
-            try
-            {
-                var user = new User
-                {
-                    Id = Repository.Instance.GenerateNewUserId(),
-                    Name = name
-                };
+		if (_editingUser == null)
+		{
+			try
+			{
+				var user = new User
+				{
+					Id = Repository.Instance.GenerateNewUserId(),
+					Name = name
+				};
 
-                _repository.AddUser(user);
-                NotifierService.Instance.UpdateStatus("User added.");
-            }
-            catch (Exception ex)
-            {
-                NotifierService.Instance.UpdateStatus($"Error adding user: {ex.Message}");
-            }
-        }
-        else
-        {
-            try
-            {
-                _editingUser.Name = name;
-                _repository.UpdateUser(_editingUser);
-                NotifierService.Instance.UpdateStatus("User updated.");
-            }
-            catch (Exception ex)
-            {
-                NotifierService.Instance.UpdateStatus($"Error updating user: {ex.Message}");
-            }
-        }
+				_repository.AddUser(user);
+				NotifierService.Instance.UpdateStatus("User added.");
+				LoadUsers(goToLastPage: true); // Jump to last page
+			}
+			catch (Exception ex)
+			{
+				NotifierService.Instance.UpdateStatus($"Error adding user: {ex.Message}");
+			}
+		}
+		else
+		{
+			try
+			{
+				_editingUser.Name = name;
+				_repository.UpdateUser(_editingUser);
+				NotifierService.Instance.UpdateStatus("User updated.");
+				LoadUsers();
+			}
+			catch (Exception ex)
+			{
+				NotifierService.Instance.UpdateStatus($"Error updating user: {ex.Message}");
+			}
+		}
 
-        LoadUsers();
-        ClearForm();
-    }
+		ClearForm();
+		MainScrollViewer.ScrollToTop();
+	}
 
-    private void EditText_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+
+	private void EditText_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
         if (sender is TextBlock textBlock &&
             textBlock.DataContext is User user)
@@ -151,7 +159,8 @@ public partial class UserManagement : UserControl
             NameBox.Input.Text = user.Name;
             FormHeading.Text = "Edit User";
             AddOrSaveButton.Content = "Save Changes";
-            AddOrSaveButton.Content = CreateButtonContent("Save Changes", "/assets/add.png");
+            AddOrSaveButton.Width = 145;
+			AddOrSaveButton.Content = CreateButtonContent("Save Changes", "/assets/add.png");
         }
     }
 

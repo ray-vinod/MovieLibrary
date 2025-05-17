@@ -11,14 +11,65 @@ public partial class BorrowReturn : UserControl
     private MovieRepository _movieRepository;
     private UserRepository _userRepository;
 
-    public BorrowReturn()
+	private BorrowRecordRepository _borrowRepo;
+	private int _currentPage = 1;
+	private int _pageSize = 8;
+	private int _totalPages = 1;
+
+	public BorrowReturn()
     {
         InitializeComponent();
         _movieRepository = Repository.Instance.MovieRepo;
         _userRepository = Repository.Instance.UserRepo;
         _borrowReturnService = new BorrowReturnService(_movieRepository);
+
+        _borrowRepo = Repository.Instance.RecordRepo;
+        UpdatePagination();
         RefreshBorrowRecords();
     }
+
+	private void UpdatePagination()
+	{
+		var allRecords = _borrowRepo.GetAllBorrowRecord().ToList();
+		_totalPages = (int)Math.Ceiling(allRecords.Count / (double)_pageSize);
+
+		if (_currentPage > _totalPages) _currentPage = _totalPages == 0 ? 1 : _totalPages;
+
+		var pagedRecords = allRecords
+			.Skip((_currentPage - 1) * _pageSize)
+			.Take(_pageSize)
+			.ToList();
+
+		BorrowRecordsDataGrid.ItemsSource = pagedRecords;
+
+		PaginationTextBlock.Text = $"Page {_currentPage} of {_totalPages}";
+		PrevPageButton.IsEnabled = _currentPage > 1;
+		NextPageButton.IsEnabled = _currentPage < _totalPages;
+	}
+
+	private void PrevPageButton_Click(object sender, RoutedEventArgs e)
+	{
+		if (_currentPage > 1)
+		{
+			_currentPage--;
+			UpdatePagination();
+		}
+	}
+
+	private void NextPageButton_Click(object sender, RoutedEventArgs e)
+	{
+		if (_currentPage < _totalPages)
+		{
+			_currentPage++;
+			UpdatePagination();
+		}
+	}
+
+	private void RefreshButton_Click(object sender, RoutedEventArgs e)
+	{
+		_currentPage = 1;
+		UpdatePagination();
+	}
 
     private void RefreshBorrowRecords()
     {
@@ -97,11 +148,6 @@ public partial class BorrowReturn : UserControl
         Clear();
 
         NotifierService.Instance.UpdateStatus(result);
-        RefreshBorrowRecords();
-    }
-
-    private void RefreshButton_Click(object sender, RoutedEventArgs e)
-    {
         RefreshBorrowRecords();
     }
 }

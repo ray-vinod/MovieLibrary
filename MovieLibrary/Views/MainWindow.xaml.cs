@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+
 using MovieLibrary.Services;
 using MovieLibrary.Views.UserControls;
 
@@ -6,66 +8,90 @@ namespace MovieLibrary.Views;
 
 public partial class MainWindow : Window
 {
-    public MainWindow()
-    {
-        InitializeComponent();
-        MainContent.Content = new Home();
-        StatusText.Text = "Welcome to Movie Library";
+	public MainWindow()
+	{
+		InitializeComponent();
+		MainContent.Content = new Home();
 
-        NotifierService.Instance.StatusUpdated += OnStatusUpdated;
-    }
+		NotifierService.Instance.StatusUpdated += OnStatusUpdated;
 
-    private void OnStatusUpdated(string message)
-    {
-        Dispatcher.Invoke(() => StatusText.Text = $"App Status:- {message}");
-    }
+		NotifierService.Instance.UpdateStatus("Main Window");
+	}
 
-    protected override void OnClosed(EventArgs e)
-    {
-        NotifierService.Instance.StatusUpdated -= OnStatusUpdated;
-        base.OnClosed(e);
-    }
+	// Status display
+	private void OnStatusUpdated(string? location, string message)
+	{
+		Dispatcher.Invoke(() =>
+		{
+			if (!string.IsNullOrWhiteSpace(location))
+			{
+				LocationText.Text = $"Status: {location}";
+			}
 
-    public void ImportExport_Click(object sender, RoutedEventArgs e)
-    {
-        MainContent.Content = new ImportExport();
-        StatusText.Text = $"App Status:- Data import/export as json or from json";
-    }
+			StatusText.Text = message;
+		});
+	}
 
-    private void Home_Click(object sender, RoutedEventArgs e)
-    {
-        MainContent.Content = new Home();
-        StatusText.Text = $"App Status:- Welcome to Movie Library!";
-    }
+	// event dispose
+	protected override void OnClosed(EventArgs e)
+	{
+		NotifierService.Instance.StatusUpdated -= OnStatusUpdated;
+		base.OnClosed(e);
+	}
 
-    private void MovieManagement_Click(object sender, RoutedEventArgs e)
-    {
-        MainContent.Content = new MovieManagement();
-        StatusText.Text = $"App Status:- Movie Management";
-    }
-
-    private void UserManagement_Click(object sender, RoutedEventArgs e)
-    {
-        MainContent.Content = new UserManagement();
-        StatusText.Text = $"App Status:- Movie Management";
-    }
-
-    private void BorrowHistory_Click(object sender, RoutedEventArgs e)
-    {
-        MainContent.Content = new BorrowReturn();
-        StatusText.Text = $"App Status:- Borrow Return managemen";
-    }
+	private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+	{
+		if (e.NewSize.Width < 600)
+		{
+			MainGrid.ColumnDefinitions[0].Width = new GridLength(60);
+		}
+		else
+		{
+			MainGrid.ColumnDefinitions[0].Width = new GridLength(200);
+		}
+	}
 
 
-    private void HowToUse_Click(object sender, RoutedEventArgs e)
-    {
-        MainContent.Content = new HowToUse();
-        StatusText.Text = $"App Status:- How to use";
-    }
+	public void ImportExport_Click(object sender, RoutedEventArgs e)
+	{
+		MainContent.Content = new ImportExport();
+		NotifierService.Instance.UpdateStatusLocation((MenuItem)sender);
+	}
 
-    private void About_Click(object sender, RoutedEventArgs e)
-    {
-        MainContent.Content = new About();
-        StatusText.Text = $"App Status:- About";
-    }
+	private void Home_Click(object sender, RoutedEventArgs e)
+	{
+		MainContent.Content = new Home();
+		NotifierService.Instance.UpdateStatusLocation((MenuItem)sender);
+	}
+
+	private void MovieManagement_Click(object sender, RoutedEventArgs e)
+	{
+		MainContent.Content = new MovieManagement();
+			NotifierService.Instance.UpdateStatusLocation((MenuItem)sender);
+	}
+
+	private void UserManagement_Click(object sender, RoutedEventArgs e)
+	{
+		MainContent.Content = new UserManagement();
+		NotifierService.Instance.UpdateStatusLocation((MenuItem)sender);
+	}
+
+	private void BorrowHistory_Click(object sender, RoutedEventArgs e)
+	{
+		MainContent.Content = new BorrowReturn();
+		NotifierService.Instance.UpdateStatusLocation((MenuItem)sender);
+	}
+
+
+	private void HowToUse_Click(object sender, RoutedEventArgs e)
+	{
+		MainContent.Content = new HowToUse();
+		NotifierService.Instance.UpdateStatusLocation((MenuItem)sender);
+	}
+
+	private void About_Click(object sender, RoutedEventArgs e)
+	{
+		MainContent.Content = new About();
+		NotifierService.Instance.UpdateStatusLocation((MenuItem)sender);
+	}
 }

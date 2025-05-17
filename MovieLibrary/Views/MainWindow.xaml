@@ -3,202 +3,198 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MovieLibrary"
+        xmlns:local="clr-namespace:MovieLibrary" 
+        xmlns:local1="clr-namespace:MovieLibrary.Helpers"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        FontSize="16"
+        FontWeight="Bold"
         Title="Movie Library"
         d:DesignHeight="450"
         d:DesignWidth="800"
-        MinHeight="650"
-        MinWidth="800"
-        Icon="pack://application:,,,/Assets/app.png">
-        <Window.Resources>
-                <!-- Menu Item Style -->
-                <Style x:Key="SideMenuItemStyle"
-                       TargetType="MenuItem">
-                        <Setter Property="FontSize"
-                                Value="14"/>
-                        <Setter Property="Padding"
-                                Value="10,6"/>
-                        <Setter Property="Margin"
-                                Value="5,2"/>
-                        <Setter Property="Foreground"
-                                Value="#333"/>
-                        <Setter Property="Background"
-                                Value="Transparent"/>
-                        <Setter Property="OverridesDefaultStyle"
-                                Value="True"/>
-                        <Setter Property="ItemsPanel">
-                                <Setter.Value>
-                                        <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Vertical"/>
-                                        </ItemsPanelTemplate>
-                                </Setter.Value>
-                        </Setter>
-                        <Setter Property="Template">
-                                <Setter.Value>
-                                        <ControlTemplate TargetType="MenuItem">
-                                                <StackPanel>
-                                                        <!-- Header area with icon -->
-                                                        <Border Background="{TemplateBinding Background}"
-                                                                Padding="{TemplateBinding Padding}">
-                                                                <StackPanel Orientation="Horizontal">
-                                                                        <ContentPresenter ContentSource="Icon"
-                                                                                          Focusable="False"/>
-                                                                        <TextBlock Text="{TemplateBinding Header}"
-                                                                                   VerticalAlignment="Center"
-                                                                                   Margin="5,0,0,0"/>
-                                                                </StackPanel>
-                                                        </Border>
-                                                        <!-- Submenu items are initially collapsed -->
-                                                        <ItemsPresenter x:Name="SubItemsHost"
-                                                                        Margin="20,0,0,0"
-                                                                        Visibility="Collapsed"/>
-                                                </StackPanel>
-                                                <ControlTemplate.Triggers>
-                                                        <!-- When the menu item is expanded, show its submenus -->
-                                                        <Trigger Property="IsSubmenuOpen"
-                                                                 Value="True">
-                                                                <Setter TargetName="SubItemsHost"
-                                                                        Property="Visibility"
-                                                                        Value="Visible"/>
-                                                        </Trigger>
-                                                </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                </Setter.Value>
-                        </Setter>
-                </Style>
+        Icon="pack://application:,,,/Assets/app.png"
+        SizeChanged="Window_SizeChanged">
 
-                <!-- style for menu item icons -->
-                <Style x:Key="MenuIconStyle"
-                       TargetType="Image">
-                        <Setter Property="Width"
-                                Value="16"/>
-                        <Setter Property="Height"
-                                Value="16"/>
-                </Style>
+    <Window.Resources>
+        <!-- Register converter -->
+        <local1:WidthToVisibilityConverter x:Key="WidthToVisibilityConverter" Threshold="600"/>
 
-        </Window.Resources>
+        <!-- Menu Item Style -->
+        <Style x:Key="SideMenuItemStyle" TargetType="MenuItem">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Margin" Value="5,2"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="MenuItem">
+                        <StackPanel>
+                            <!-- Header area with icon -->
+                            <Border Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ContentPresenter ContentSource="Icon" Focusable="False"/>
+                                    <TextBlock Text="{TemplateBinding Header}"
+                                               VerticalAlignment="Center"
+                                               Margin="5,0,0,0">
+                                        <!-- Hide text when window width is below 600 -->
+                                        <TextBlock.Visibility>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=Window}"
+                                                     Path="ActualWidth"
+                                                     Converter="{StaticResource WidthToVisibilityConverter}" />
+                                        </TextBlock.Visibility>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
 
-        <Grid>
-                <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="25"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="220"/>
-                        <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                            <!-- Submenu items are initially collapsed -->
+                            <ItemsPresenter x:Name="SubItemsHost"
+                                            Margin="20,0,0,0"
+                                            Visibility="Collapsed"/>
+                        </StackPanel>
 
-                <!-- Side Menu and Submenus -->
-                <Menu Grid.Row="0"
-                      Grid.Column="0"
-                      Background="#E6EEF7"
-                      BorderBrush="#B0C4DE"
-                      BorderThickness="0,0,1,0">
-                        <Menu.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Vertical"/>
-                                </ItemsPanelTemplate>
-                        </Menu.ItemsPanel>
-                        <MenuItem x:Name="Home"
-                                  Header="Home"
-                                  Style="{StaticResource SideMenuItemStyle}"
-                                  Click="Home_Click">
-                                <MenuItem.Icon>
-                                        <Image Source="pack://application:,,,/Assets/home.png"
-                                               Style="{StaticResource MenuIconStyle}"/>
-                                </MenuItem.Icon>
-                        </MenuItem>
+                        <ControlTemplate.Triggers>
+                            <!-- When the menu item is expanded, show its submenus -->
+                            <Trigger Property="IsSubmenuOpen" Value="True">
+                                <Setter TargetName="SubItemsHost" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-                        <MenuItem Header="Movie Management"
-                                  Style="{StaticResource SideMenuItemStyle}"
-                                  Click="MovieManagement_Click">
-                                <MenuItem.Icon>
-                                        <Image Source="pack://application:,,,/Assets/movie.png"
-                                               Style="{StaticResource MenuIconStyle}"/>
-                                </MenuItem.Icon>
-                        </MenuItem>
+        <!-- Style for menu item icons -->
+        <Style x:Key="MenuIconStyle" TargetType="Image">
+            <Setter Property="Width" Value="36"/>
+            <Setter Property="Height" Value="24"/>
+        </Style>
+    </Window.Resources>
 
-                        <MenuItem Header="User"
-                                  Style="{StaticResource SideMenuItemStyle}">
-                                <MenuItem.Icon>
-                                        <Image Source="pack://application:,,,/Assets/user.png"
-                                               Style="{StaticResource MenuIconStyle}"/>
-                                </MenuItem.Icon>
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-                                <MenuItem Header="User Management"
-                                          Style="{StaticResource SideMenuItemStyle}"
-                                          Click="UserManagement_Click">
-                                        <MenuItem.Icon>
-                                                <Image Source="pack://application:,,,/Assets/list.png"
-                                                       Style="{StaticResource MenuIconStyle}"/>
-                                        </MenuItem.Icon>
-                                </MenuItem>
+        <!-- Side Menu and Submenus -->
+        <Menu Grid.Row="0"
+              Grid.Column="0"
+              Background="#E6EEF7"
+              BorderBrush="#B0C4DE"
+              BorderThickness="0,0,1,0">
+            <Menu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
 
-                        </MenuItem>
-                        <MenuItem Header="Borrow History"
-                                  Style="{StaticResource SideMenuItemStyle}">
-                                <MenuItem.Icon>
-                                        <Image Source="pack://application:,,,/Assets/showtime.png"
-                                               Style="{StaticResource MenuIconStyle}"/>
-                                </MenuItem.Icon>
+            <!-- Home -->
+            <MenuItem x:Name="Home"
+                      Header="Home"
+                      Style="{StaticResource SideMenuItemStyle}"
+                      Click="Home_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Assets/home.png"
+                           Style="{StaticResource MenuIconStyle}"/>
+                </MenuItem.Icon>
+            </MenuItem>
 
-                                <MenuItem Header="Add New"
-                                          Style="{StaticResource SideMenuItemStyle}"
-                                          Click="BorrowHistory_Click">
-                                        <MenuItem.Icon>
-                                                <Image Source="pack://application:,,,/Assets/add.png"
-                                                       Style="{StaticResource MenuIconStyle}"/>
-                                        </MenuItem.Icon>
-                                </MenuItem>
-                        </MenuItem>
-                        <MenuItem Header="Import/Export Data"
-                                  Style="{StaticResource SideMenuItemStyle}"
-                                  Click="ImportExport_Click">
-                                <MenuItem.Icon>
-                                        <Image Source="pack://application:,,,/Assets/download.png"
-                                               Style="{StaticResource MenuIconStyle}"/>
-                                </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="Help"
-                                  Style="{StaticResource SideMenuItemStyle}">
-                                <MenuItem.Icon>
-                                        <Image Source="pack://application:,,,/Assets/query.png"
-                                               Style="{StaticResource MenuIconStyle}"/>
-                                </MenuItem.Icon>
-                                <MenuItem Header="About"
-                                          Style="{StaticResource SideMenuItemStyle}"
-                                          Click="About_Click">
-                                        <MenuItem.Icon>
-                                                <Image Source="pack://application:,,,/Assets/about.jpg"
-                                                       Style="{StaticResource MenuIconStyle}"/>
-                                        </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Header="How to use?"
-                                          Style="{StaticResource SideMenuItemStyle}"
-                                          Click="HowToUse_Click">
-                                        <MenuItem.Icon>
-                                                <Image Source="pack://application:,,,/Assets/idea.png"
-                                                       Style="{StaticResource MenuIconStyle}"/>
-                                        </MenuItem.Icon>
-                                </MenuItem>
-                        </MenuItem>
-                </Menu>
+            <!-- Movie -->
+            <MenuItem Header="Movie Management"
+                      Style="{StaticResource SideMenuItemStyle}"
+                      Click="MovieManagement_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Assets/movie.png"
+                           Style="{StaticResource MenuIconStyle}"/>
+                </MenuItem.Icon>
+            </MenuItem>
 
-                <!-- Main Content Area -->
-                <ContentControl x:Name="MainContent"
-                                Grid.Column="1"/>
+            <!-- User -->
+            <MenuItem Header="User Management"
+                      Style="{StaticResource SideMenuItemStyle}"
+                      Click="UserManagement_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Assets/user.png"
+                           Style="{StaticResource MenuIconStyle}"/>
+                </MenuItem.Icon>
+            </MenuItem>
 
-                <!-- Status Bar -->
-                <Border Grid.Row="1"
-                        Grid.ColumnSpan="2"
-                        Background="#333"
-                        Padding="10,0">
-                        <TextBlock x:Name="StatusText"
-                                   Foreground="White"
-                                   VerticalAlignment="Center"
-                                   Text="Welcome to Movie Library"/>
-                </Border>
-        </Grid>
+            <!-- Borrow History -->
+            <MenuItem Header="Borrow History"
+                      Style="{StaticResource SideMenuItemStyle}"
+                      Click="BorrowHistory_Click">
+                <MenuItem.Icon>
+                    <Image Source="/Assets/borrow.png"
+                           Style="{StaticResource MenuIconStyle}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+
+            <!-- Import/Export -->
+            <MenuItem Header="Import/Export"
+                      Style="{StaticResource SideMenuItemStyle}"
+                      Click="ImportExport_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Assets/download.png"
+                           Style="{StaticResource MenuIconStyle}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+
+            <!-- Help -->
+            <MenuItem Header="Help"
+                      Style="{StaticResource SideMenuItemStyle}">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Assets/query.png"
+                           Style="{StaticResource MenuIconStyle}"/>
+                </MenuItem.Icon>
+                <MenuItem Header="About"
+                          Style="{StaticResource SideMenuItemStyle}"
+                          Click="About_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Assets/about.jpg"
+                               Style="{StaticResource MenuIconStyle}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="How to use?"
+                          Style="{StaticResource SideMenuItemStyle}"
+                          Click="HowToUse_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Assets/idea.png"
+                               Style="{StaticResource MenuIconStyle}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <!-- Main Content Area -->
+        <ContentControl x:Name="MainContent" Grid.Column="1"/>
+
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="1"
+                   Grid.ColumnSpan="2"
+                   VerticalAlignment="Center"
+                   BorderBrush="#FFE6EEF7"
+                   BorderThickness="0,1,0,0"
+                   RenderTransformOrigin="0.648,0.636">
+            <StatusBarItem>
+                <TextBlock x:Name="LocationText" Text="Status" Width="590"/>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="StatusText" Text="|" Width="200"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
 </Window>
