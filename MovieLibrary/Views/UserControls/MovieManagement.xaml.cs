@@ -1,334 +1,337 @@
+using MovieLibrary.Data;
+using MovieLibrary.Models;
+using MovieLibrary.Services;
+
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using MovieLibrary.Data;
-using MovieLibrary.Models;
-using MovieLibrary.Services;
 
 namespace MovieLibrary.Views.UserControls;
 
 public partial class MovieManagement : UserControl
 {
-    private MovieRepository _movieRepository;
+	private MovieRepository _movieRepository;
 
-    private int _currentPage = 1;
-    private int _pageSize = 12;
-    private int _totalPages = 1;
+	private int _currentPage = 1;
+	private int _pageSize = 8;
+	private int _totalPages = 1;
 
-    public MovieManagement()
-    {
-        InitializeComponent();
+	public MovieManagement()
+	{
+		InitializeComponent();
 
-        _movieRepository = Repository.Instance.MovieRepo;
+		_movieRepository = Repository.Instance.MovieRepo;
 
-        UpdatePagination();
-    }
+		UpdatePagination();
+	}
 
-    private void UpdatePagination()
-    {
-        var allMovies = _movieRepository.GetAllMovies().ToList();
-        _totalPages = (int)Math.Ceiling(allMovies.Count / (double)_pageSize);
+	private void UpdatePagination()
+	{
+		var allMovies = _movieRepository.GetAllMovies().ToList();
+		_totalPages = (int)Math.Ceiling(allMovies.Count / (double)_pageSize);
 
-        if (_currentPage > _totalPages) _currentPage = _totalPages == 0 ? 1 : _totalPages;
+		if (_currentPage > _totalPages) _currentPage = _totalPages == 0 ? 1 : _totalPages;
 
-        var pagedMovies = allMovies
-            .Skip((_currentPage - 1) * _pageSize)
-            .Take(_pageSize)
-            .ToList();
+		var pagedMovies = allMovies
+			.Skip((_currentPage - 1) * _pageSize)
+			.Take(_pageSize)
+			.ToList();
 
-        MoviesDataGrid.ItemsSource = pagedMovies;
+		MoviesDataGrid.ItemsSource = pagedMovies;
 
-        PaginationTextBlock.Text = $"Page {_currentPage} of {_totalPages}";
-        PrevPageButton.IsEnabled = _currentPage > 1;
-        NextPageButton.IsEnabled = _currentPage < _totalPages;
-    }
+		PaginationTextBlock.Text = $"Page {_currentPage} of {_totalPages}";
+		PrevPageButton.IsEnabled = _currentPage > 1;
+		NextPageButton.IsEnabled = _currentPage < _totalPages;
+	}
 
-    private void PrevPageButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (_currentPage > 1)
-        {
-            _currentPage--;
-            UpdatePagination();
-        }
-    }
+	private void PrevPageButton_Click(object sender, RoutedEventArgs e)
+	{
+		if (_currentPage > 1)
+		{
+			_currentPage--;
+			UpdatePagination();
+		}
+	}
 
-    private void NextPageButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (_currentPage < _totalPages)
-        {
-            _currentPage++;
-            UpdatePagination();
-        }
-    }
+	private void NextPageButton_Click(object sender, RoutedEventArgs e)
+	{
+		if (_currentPage < _totalPages)
+		{
+			_currentPage++;
+			UpdatePagination();
+		}
+	}
 
-    private void RefreshDataGrid()
-    {
-        UpdatePagination();
-        var allMovies = _movieRepository.GetAllMovies().ToList();
-        if (allMovies.Count == 0)
-        {
-            NotifierService.Instance.UpdateStatus($"There is no movie");
-        }
-    }
+	private void RefreshDataGrid()
+	{
+		UpdatePagination();
+		var allMovies = _movieRepository.GetAllMovies().ToList();
+		if (allMovies.Count == 0)
+		{
+			NotifierService.Instance.UpdateStatus($"There is no movie");
+		}
+	}
 
-    // Linear search by title
-    // Binary search by ID (ensure sorted first)
-    private void TitleSearchButton_Click(object sender, RoutedEventArgs e)
-    {
-        string searchTitle = TitleSearchBox.Input.Text.Trim();
-        string searchId = IdSearchBox.Input.Text.Trim();
+	// Linear search by title
+	// Binary search by ID (ensure sorted first)
+	private void TitleSearchButton_Click(object sender, RoutedEventArgs e)
+	{
+		string searchTitle = TitleSearchBox.Input.Text.Trim();
+		string searchId = IdSearchBox.Input.Text.Trim();
 
-        IdSearchBox.Input.Text = "";
-        TitleSearchBox.Input.Text = "";
+		IdSearchBox.Input.Text = "";
+		TitleSearchBox.Input.Text = "";
 
-        IEnumerable<Movie> movies = _movieRepository.GetAllMovies();
-        List<Movie> searchedMovies = new();
+		IEnumerable<Movie> movies = _movieRepository.GetAllMovies();
+		List<Movie> searchedMovies = new();
 
-        if (!string.IsNullOrWhiteSpace(searchTitle))
-        {
-            searchedMovies = SearchService.SearchMoviesByTitle(movies, searchTitle).ToList();
+		if (!string.IsNullOrWhiteSpace(searchTitle))
+		{
+			searchedMovies = SearchService.SearchMoviesByTitle(movies, searchTitle).ToList();
 
-            NotifierService.Instance.UpdateStatus("Searching movie by TITLE using Linear method.");
-        }
+			NotifierService.Instance.UpdateStatus("Searching movie by TITLE using Linear method.");
+		}
 
-        if (!string.IsNullOrWhiteSpace(searchId))
-        {
-            var searchedMovie = SearchService.SearchMovieById(movies, searchId);
-            searchedMovies.Add(searchedMovie!);
+		if (!string.IsNullOrWhiteSpace(searchId))
+		{
+			var searchedMovie = SearchService.SearchMovieById(movies, searchId);
+			searchedMovies.Add(searchedMovie!);
 
-            NotifierService.Instance.UpdateStatus("Searching movie by ID using Binary method.");
-        }
+			NotifierService.Instance.UpdateStatus("Searching movie by ID using Binary method.");
+		}
 
-        MoviesDataGrid.ItemsSource = searchedMovies;
-    }
+		MoviesDataGrid.ItemsSource = searchedMovies;
+	}
 
-    private void RefreshButton_Click(object sender, RoutedEventArgs e)
-    {
-        RefreshDataGrid();
-    }
+	private void RefreshButton_Click(object sender, RoutedEventArgs e)
+	{
+		RefreshDataGrid();
+	}
 
-    private void Edit_Click(object sender, RoutedEventArgs e)
-    {
-        var button = sender as Button;
-        var movie = button?.Tag as Movie;
+	private void Edit_Click(object sender, RoutedEventArgs e)
+	{
+		var button = sender as Button;
+		var movie = button?.Tag as Movie;
 
-        if (movie != null)
-        {
-            if (button!.Content.ToString() == "Edit")
-            {
-                button.Content = "Save";
-                MoviesDataGrid.IsReadOnly = false;
-                MoviesDataGrid.Columns[0].IsReadOnly = true;
-                MoviesDataGrid.CurrentCell = new DataGridCellInfo(movie, MoviesDataGrid.Columns[1]);
-                MoviesDataGrid.BeginEdit();
-            }
-            else if (button.Content.ToString() == "Save")
-            {
-                MoviesDataGrid.CommitEdit();
-                MoviesDataGrid.IsReadOnly = true;
-                button.Content = "Edit";
-            }
-        }
-    }
+		if (movie != null)
+		{
+			if (button!.Content.ToString() == "Edit")
+			{
+				button.Content = "Save";
+				MoviesDataGrid.IsReadOnly = false;
+				MoviesDataGrid.Columns[0].IsReadOnly = true;
+				MoviesDataGrid.CurrentCell = new DataGridCellInfo(movie, MoviesDataGrid.Columns[1]);
+				MoviesDataGrid.BeginEdit();
+			}
+			else if (button.Content.ToString() == "Save")
+			{
+				MoviesDataGrid.CommitEdit();
+				MoviesDataGrid.IsReadOnly = true;
+				button.Content = "Edit";
+			}
+		}
+	}
 
-    private void Delete_Click(object sender, RoutedEventArgs e)
-    {
-        var button = sender as Button;
-        var movie = button?.Tag as Movie;
-        if (movie != null)
-        {
-            if (button!.Content.ToString() == "Delete")
-            {
-                if (MessageBox.Show($"Are you sure you want to delete \"{movie.Title}\"?", "Confirm Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                {
-                    MovieRemove(movie);
-                }
-            }
-            else if (button.Content.ToString() == "Cancel")
-            {
-                MovieRemove(movie);
-            }
-        }
-    }
+	private void Delete_Click(object sender, RoutedEventArgs e)
+	{
+		var button = sender as Button;
+		var movie = button?.Tag as Movie;
+		if (movie != null)
+		{
+			if (button!.Content.ToString() == "Delete")
+			{
+				if (MessageBox.Show($"Are you sure you want to delete \"{movie.Title}\"?", "Confirm Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					MovieRemove(movie);
+				}
+			}
+			else if (button.Content.ToString() == "Cancel")
+			{
+				MovieRemove(movie);
+			}
+		}
+	}
 
-    private void MoviesDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-    {
-        if (e.EditAction == DataGridEditAction.Commit)
-        {
-            var row = e.Row;
-            var movie = row.Item as Movie;
+	private void MoviesDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+	{
+		if (e.EditAction == DataGridEditAction.Commit)
+		{
+			var row = e.Row;
+			var movie = row.Item as Movie;
 
-            if (movie != null)
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    var rowIndex = MoviesDataGrid.Items.IndexOf(movie);
-                    var selectedRow = MoviesDataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
+			if (movie != null)
+			{
+				Dispatcher.BeginInvoke(new Action(() =>
+				{
+					var rowIndex = MoviesDataGrid.Items.IndexOf(movie);
+					var selectedRow = MoviesDataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
 
-                    if (selectedRow != null)
-                    {
-                        var editButton = Helpers.DataGrid.FindButtonInRow(selectedRow, "EditButton");
-                        var deleteButton = Helpers.DataGrid.FindButtonInRow(selectedRow, "DeleteButton");
+					if (selectedRow != null)
+					{
+						var editButton = Helpers.DataGrid.FindButtonInRow(selectedRow, "EditButton");
+						var deleteButton = Helpers.DataGrid.FindButtonInRow(selectedRow, "DeleteButton");
 
-                        if (deleteButton != null && deleteButton.Content.Equals("Delete"))
-                        {
-                            NotifierService.Instance.UpdateStatus($"The movie '{movie.Title}' is edited.");
-                        }
-                        else
-                        {
-                            NotifierService.Instance.UpdateStatus($"New movie '{movie.Title}' is added.");
-                        }
+						if (deleteButton != null && deleteButton.Content.Equals("Delete"))
+						{
+							NotifierService.Instance.UpdateStatus($"The movie '{movie.Title}' is edited.");
+						}
+						else
+						{
+							NotifierService.Instance.UpdateStatus($"New movie '{movie.Title}' is added.");
+						}
 
-                        if (editButton != null)
-                        {
-                            editButton.Content = "Edit";
-                        }
+						if (editButton != null)
+						{
+							editButton.Content = "Edit";
+						}
 
-                        if (deleteButton != null)
-                        {
-                            deleteButton.Content = "Delete";
-                        }
+						if (deleteButton != null)
+						{
+							deleteButton.Content = "Delete";
+						}
 
-                        MoviesDataGrid.IsReadOnly = true;
-                    }
-                }), DispatcherPriority.Background);
-            }
-        }
-    }
+						MoviesDataGrid.IsReadOnly = true;
+					}
+				}), DispatcherPriority.Background);
+			}
+		}
+	}
 
-    private void MoviesDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-    {
-        e.Handled = true; // Prevent default sort
+	private void MoviesDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
+	{
+		e.Handled = true; // Prevent default sort
 
-        var allMovies = _movieRepository.GetAllMovies().ToList();
-        IEnumerable<Movie> sortedMovies = allMovies;
+		var allMovies = _movieRepository.GetAllMovies().ToList();
+		IEnumerable<Movie> sortedMovies = allMovies;
 
-        if (e.Column.Header.ToString() == "Title")
-        {
-            sortedMovies = Services.SortService.BubbleSortByTitle(allMovies);
-            NotifierService.Instance.UpdateStatus("Sorted by Title using Bubble Sort.");
-        }
-        else if (e.Column.Header.ToString() == "ReleaseYear")
-        {
-            sortedMovies = Services.SortService.MergeSortByReleaseYear(allMovies);
-            NotifierService.Instance.UpdateStatus("Sorted by Release Year using Merge Sort.");
-        }
-        else
-        {
-            return;
-        }
+		if (e.Column.Header.ToString() == "Title")
+		{
+			sortedMovies = Services.SortService.BubbleSortByTitle(allMovies);
+			NotifierService.Instance.UpdateStatus("Sorted by Title using Bubble Sort.");
+		}
+		else if (e.Column.Header.ToString() == "ReleaseYear")
+		{
+			sortedMovies = Services.SortService.MergeSortByReleaseYear(allMovies);
+			NotifierService.Instance.UpdateStatus("Sorted by Release Year using Merge Sort.");
+		}
+		else
+		{
+			return;
+		}
 
-        // Toggle sort direction
-        if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
-        {
-            e.Column.SortDirection = ListSortDirection.Ascending;
-        }
-        else
-        {
-            sortedMovies = sortedMovies.Reverse();
-            e.Column.SortDirection = ListSortDirection.Descending;
-        }
+		// Toggle sort direction
+		if (e.Column.SortDirection == null || e.Column.SortDirection == ListSortDirection.Descending)
+		{
+			e.Column.SortDirection = ListSortDirection.Ascending;
+		}
+		else
+		{
+			sortedMovies = sortedMovies.Reverse();
+			e.Column.SortDirection = ListSortDirection.Descending;
+		}
 
-        MoviesDataGrid.ItemsSource = sortedMovies
-            .Skip((_currentPage - 1) * _pageSize)
-            .Take(_pageSize)
-            .ToList();
+		_currentPage = 1;
+		MoviesDataGrid.ItemsSource = sortedMovies
+			.Skip((_currentPage - 1) * _pageSize)
+			.Take(_pageSize)
+			.ToList();
 
-        // Clear sort direction from other columns
-        foreach (var col in MoviesDataGrid.Columns)
-        {
-            if (col != e.Column)
-                col.SortDirection = null;
-        }
-    }
+		// Clear sort direction from other columns
+		foreach (var col in MoviesDataGrid.Columns)
+		{
+			if (col != e.Column)
+				col.SortDirection = null;
+		}
+	}
 
-    private void Add_Click(object sender, RoutedEventArgs e)
-    {
-        try
-        {
-            var newMovie = new Movie
-            {
-                Id = Repository.Instance.GenerateNewMovieId(),
-                Title = "Title",
-                Genre = "Genre",
-                Director = "UnKnown",
-                ReleaseYear = DateTime.Now.Year,
-                IsAvailable = true,
-            };
+	private void Add_Click(object sender, RoutedEventArgs e)
+	{
+		try
+		{
+			var newMovie = new Movie
+			{
+				Id = Repository.Instance.GenerateNewMovieId(),
+				Title = "Title",
+				Genre = "Genre",
+				Director = "UnKnown",
+				ReleaseYear = DateTime.Now.Year,
+				IsAvailable = true,
+			};
 
-            NotifierService.Instance.UpdateStatus($"{newMovie.Id}");
+			_movieRepository.AddMovie(newMovie);
 
-            _movieRepository.AddMovie(newMovie);
+			// Go to the last page
+			var allMovies = _movieRepository.GetAllMovies().ToList();
+			_totalPages = (int)Math.Ceiling(allMovies.Count / (double)_pageSize);
+			_currentPage = _totalPages;
 
-            RefreshDataGrid();
+			UpdatePagination();
 
-            MoviesDataGrid.IsReadOnly = false;
-            MoviesDataGrid.CanUserAddRows = false;
+			MoviesDataGrid.IsReadOnly = false;
+			MoviesDataGrid.CanUserAddRows = false;
 
-            // Scroll to the new row and focus on it (important for the visual tree)
-            MoviesDataGrid.ScrollIntoView(newMovie);
+			// Scroll into view of the new movie (should now be on the last page)
+			Dispatcher.BeginInvoke(new Action(() =>
+			{
+				var pagedMovies = MoviesDataGrid.ItemsSource as List<Movie>;
+				var index = pagedMovies?.IndexOf(newMovie) ?? -1;
 
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                var movies = _movieRepository.GetAllMovies();
-                var lastRowIndex = movies.Count() - 1;
+				if (index >= 0)
+				{
+					var lastRow = MoviesDataGrid.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
 
-                var lastRow = MoviesDataGrid.ItemContainerGenerator.ContainerFromIndex(lastRowIndex) as DataGridRow;
+					MoviesDataGrid.ScrollIntoView(newMovie);
 
-                if (lastRow != null)
-                {
-                    MoviesDataGrid.CurrentCell = new DataGridCellInfo(newMovie, MoviesDataGrid.Columns[1]);
-                    MoviesDataGrid.BeginEdit();
+					MoviesDataGrid.CurrentCell = new DataGridCellInfo(newMovie, MoviesDataGrid.Columns[1]);
+					MoviesDataGrid.BeginEdit();
 
-                    var editButton = Helpers.DataGrid.FindButtonInRow(lastRow, "EditButton");
-                    var deleteButton = Helpers.DataGrid.FindButtonInRow(lastRow, "DeleteButton");
+					if (lastRow != null)
+					{
+						var editButton = Helpers.DataGrid.FindButtonInRow(lastRow, "EditButton");
+						var deleteButton = Helpers.DataGrid.FindButtonInRow(lastRow, "DeleteButton");
 
-                    if (editButton != null)
-                    {
-                        editButton.Content = "Save";
-                    }
+						if (editButton != null)
+							editButton.Content = "Save";
+						if (deleteButton != null)
+							deleteButton.Content = "Cancel";
+					}
+				}
 
-                    if (deleteButton != null)
-                    {
-                        deleteButton.Content = "Cancel";
-                    }
-                }
-            }), DispatcherPriority.Background);
-        }
-        catch (Exception)
-        {
-            NotifierService.Instance.UpdateStatus($"An error occurred while adding the movie");
-        }
-    }
+			}), DispatcherPriority.Background);
+		}
+		catch (Exception)
+		{
+			NotifierService.Instance.UpdateStatus($"An error occurred while adding the movie");
+		}
+	}
 
-    private void MoviesDataGrid_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Escape)
-        {
-            var selectedMovie = MoviesDataGrid.SelectedItem as Movie;
-            if (selectedMovie != null)
-            {
-                MovieRemove(selectedMovie);
-            }
-        }
-    }
+	private void MoviesDataGrid_KeyDown(object sender, KeyEventArgs e)
+	{
+		if (e.Key == Key.Escape)
+		{
+			var selectedMovie = MoviesDataGrid.SelectedItem as Movie;
+			if (selectedMovie != null)
+			{
+				MovieRemove(selectedMovie);
+			}
+		}
+	}
 
-    private void MovieRemove(Movie movie)
-    {
-        try
-        {
-            _movieRepository.DeleteMovie(movie.Id!);
+	private void MovieRemove(Movie movie)
+	{
+		try
+		{
+			_movieRepository.DeleteMovie(movie.Id!);
 
-            NotifierService.Instance.UpdateStatus($"The movie '{movie.Title}' has been deleted.");
+			NotifierService.Instance.UpdateStatus($"The movie '{movie.Title}' has been deleted.");
 
-            RefreshDataGrid();
-        }
-        catch (Exception)
-        {
-            NotifierService.Instance.UpdateStatus($"An error occurred while deleting the movie '{movie.Title}'.");
-        }
-
-    }
+			RefreshDataGrid();
+		}
+		catch (Exception)
+		{
+			NotifierService.Instance.UpdateStatus($"An error occurred while deleting the movie '{movie.Title}'.");
+		}
+	}
 }

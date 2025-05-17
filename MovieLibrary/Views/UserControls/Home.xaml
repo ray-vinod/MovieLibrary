@@ -23,7 +23,7 @@
                Stretch="Uniform"
                RenderTransformOrigin="0.5,0.5"
                Width="300"
-               Height="400">
+               Height="400" HorizontalAlignment="Center">
             <Image.RenderTransform>
                 <ScaleTransform x:Name="ImageZoom"
                         ScaleX="1"
