@@ -5,120 +5,128 @@ namespace MovieLibrary.Services;
 
 public class BorrowReturnService
 {
-    private readonly MovieRepository _movieRepository;
-    public List<BorrowRecord> BorrowRecords { get; set; } = new();
+	private static BorrowReturnService? _instance;
+	public static BorrowReturnService Instance => _instance ??= new BorrowReturnService(Repository.Instance.MovieRepo);
 
-    public BorrowReturnService(MovieRepository movieRepository)
-    {
-        _movieRepository = movieRepository;
-    }
+	private readonly MovieRepository _movieRepository;
+	//public List<BorrowRecord> BorrowRecords { get; set; } = new();
 
-    public string BorrowMovie(string movieId, User user)
-    {
-        var movie = _movieRepository.GetMovieById(movieId);
-        if (movie == null)
-        {
-            throw new Exception("Movie not found");
-        }
+	public BorrowReturnService(MovieRepository movieRepository)
+	{
+		_movieRepository = movieRepository;
 
-        if (BorrowRecords.Any(br => br.MovieId == movieId && br.UserId == user.Id))
-        {
-            return $"User '{user.Name}' has already borrowed this movie.";
-        }
+	}
 
-        if (movie.IsAvailable)
-        {
-            movie.IsAvailable = false;
-            var borrowRecord = new BorrowRecord
-            {
-                Id = Repository.Instance.GenerateNewRecordId(),
-                MovieId = movieId,
-                UserId = user.Id!,
-                BorrowDate = DateTime.Now,
-                ReturnDate = null
-            };
+	public string BorrowMovie(string movieId, User user)
+	{
+		var movie = _movieRepository.GetMovieById(movieId);
+		if (movie == null)
+		{
+			throw new Exception("Movie not found");
+		}
 
-            BorrowRecords.Add(borrowRecord);
+		if (Repository.Instance.BorrowRecords.Any(br => br.MovieId == movieId && br.UserId == user.Id))
+		{
+			return $"User '{user.Name}' has already borrowed this movie.";
+		}
 
-            if (user.MovieViewCount.ContainsKey(movieId))
-            {
-                user.MovieViewCount[movieId]++;
-            }
-            else
-            {
-                user.MovieViewCount.Add(movieId, 1);
-            }
+		if (movie.IsAvailable)
+		{
+			movie.IsAvailable = false;
+			var borrowRecord = new BorrowRecord
+			{
+				Id = Repository.Instance.GenerateNewRecordId(),
+				MovieId = movieId,
+				MovieTitle = movie.Title,
+				UserId = user.Id!,
+				UserName = user.Name,
+				BorrowDate = DateTime.Now.ToShortDateString(),
+				ReturnDate = null
+			};
 
-            return $"Movie '{movie.Title}' is now borrowed by {user.Name}.";
-        }
-        else
-        {
-            // Prevent duplicate entries in waiting list
-            if (!string.IsNullOrEmpty(user.Id) && !movie.WaitingList.Contains(user.Id))
-            {
-                movie.WaitingList.Enqueue(user.Id);
-                return $"Movie '{movie.Title}' is currently unavailable. You have been added to the waiting list.";
-            }
-            else if (string.IsNullOrEmpty(user.Id))
-            {
-                return "Invalid user ID.";
-            }
-            else
-            {
-                return $"You are already in the waiting list for '{movie.Title}'.";
-            }
-        }
-    }
+			Repository.Instance.BorrowRecords.Add(borrowRecord);
 
-    public string ReturnMovie(string movieId, User returningUser)
-    {
-        var movie = _movieRepository.GetMovieById(movieId);
-        if (movie == null)
-        {
-            return "Movie not found";
-        }
+			if (user.MovieViewCount.ContainsKey(movieId))
+			{
+				user.MovieViewCount[movieId]++;
+			}
+			else
+			{
+				user.MovieViewCount.Add(movieId, 1);
+			}
 
-        var borrowRecord = BorrowRecords.FirstOrDefault(br => br.MovieId == movieId && br.UserId == returningUser.Id);
-        if (borrowRecord == null)
-        {
-            return "This user has not borrowed this movie.";
-        }
+			return $"Movie '{movie.Title}' is now borrowed by {user.Name}.";
+		}
+		else
+		{
+			// Prevent duplicate entries in waiting list
+			if (!string.IsNullOrEmpty(user.Id) && !movie.WaitingList.Contains(user.Id))
+			{
+				movie.WaitingList.Enqueue(user.Id);
+				return $"Movie '{movie.Title}' is currently unavailable. You have been added to the waiting list.";
+			}
+			else if (string.IsNullOrEmpty(user.Id))
+			{
+				return "Invalid user ID.";
+			}
+			else
+			{
+				return $"You are already in the waiting list for '{movie.Title}'.";
+			}
+		}
+	}
 
-        // Update return date
-        borrowRecord.ReturnDate = DateTime.Now;
-        movie.IsAvailable = true;
+	public string ReturnMovie(string movieId, User returningUser)
+	{
+		var movie = _movieRepository.GetMovieById(movieId);
+		if (movie == null)
+		{
+			return "Movie not found";
+		}
 
-        // Remove the borrow record
-        BorrowRecords.Remove(borrowRecord);
+		var borrowRecord = Repository.Instance.BorrowRecords.FirstOrDefault(br => br.MovieId == movieId && br.UserId == returningUser.Id);
+		if (borrowRecord == null)
+		{
+			return "This user has not borrowed this movie.";
+		}
 
-        if (movie.WaitingList.Count > 0)
-        {
-            var nextUserId = movie.WaitingList.Dequeue();
-            movie.IsAvailable = false;
-            var nextUser = Repository.Instance.UserRepo.GetUserById(nextUserId);
+		// Update return date
+		borrowRecord.ReturnDate = DateTime.Now.ToShortDateString();
+		movie.IsAvailable = true;
 
-            var newRecord = new BorrowRecord
-            {
-                Id = Repository.Instance.GenerateNewRecordId(),
-                MovieId = movieId,
-                UserId = nextUserId,
-                BorrowDate = DateTime.Now,
-                ReturnDate = null
-            };
-            BorrowRecords.Add(newRecord);
+		// Remove the borrow record
+		Repository.Instance.BorrowRecords.Remove(borrowRecord);
 
-            // Update view count for next user
-            if (nextUser != null)
-            {
-                if (nextUser.MovieViewCount.ContainsKey(movieId))
-                    nextUser.MovieViewCount[movieId]++;
-                else
-                    nextUser.MovieViewCount.Add(movieId, 1);
-            }
+		if (movie.WaitingList.Count > 0)
+		{
+			var nextUserId = movie.WaitingList.Dequeue();
+			movie.IsAvailable = false;
+			var nextUser = Repository.Instance.UserRepo.GetUserById(nextUserId);
 
-            return $"Movie '{movie.Title}' has been returned by {returningUser.Name} and automatically issued to next waiting user (User Id : {nextUserId}).";
-        }
+			var newRecord = new BorrowRecord
+			{
+				Id = Repository.Instance.GenerateNewRecordId(),
+				MovieId = movieId,
+				MovieTitle = movie.Title,
+				UserId = nextUserId,
+				UserName = nextUser!.Name,
+				BorrowDate = DateTime.Now.ToShortDateString(),
+				ReturnDate = null
+			};
+			Repository.Instance.BorrowRecords.Add(newRecord);
 
-        return $"Movie '{movie.Title}' has been returned by {returningUser.Name} and is now available for borrowing.";
-    }
+			// Update view count for next user
+			if (nextUser != null)
+			{
+				if (nextUser.MovieViewCount.ContainsKey(movieId))
+					nextUser.MovieViewCount[movieId]++;
+				else
+					nextUser.MovieViewCount.Add(movieId, 1);
+			}
+
+			return $"Movie '{movie.Title}' has been returned by {returningUser.Name} and automatically issued to next waiting user (User Id : {nextUserId}).";
+		}
+
+		return $"Movie '{movie.Title}' has been returned by {returningUser.Name} and is now available for borrowing.";
+	}
 }

@@ -238,7 +238,7 @@ public partial class MovieManagement : UserControl
 			.Take(_pageSize)
 			.ToList();
 
-		// Clear sort direction from other columns
+		// FormReset sort direction from other columns
 		foreach (var col in MoviesDataGrid.Columns)
 		{
 			if (col != e.Column)

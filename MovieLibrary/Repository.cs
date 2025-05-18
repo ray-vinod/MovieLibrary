@@ -21,6 +21,7 @@ public class Repository
 
     public MovieRepository MovieRepo { get; set; }
     public UserRepository UserRepo { get; set; }
+    public List<BorrowRecord> BorrowRecords { get; set; } = [];
     public BorrowRecordRepository RecordRepo { get; set; }
 
     public Repository()
