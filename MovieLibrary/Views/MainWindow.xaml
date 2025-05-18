@@ -134,7 +134,7 @@
             </MenuItem>
 
             <!-- Borrow History -->
-            <MenuItem Header="Borrow History"
+            <MenuItem Header="Borrow Management"
                       Style="{StaticResource SideMenuItemStyle}"
                       Click="BorrowHistory_Click">
                 <MenuItem.Icon>

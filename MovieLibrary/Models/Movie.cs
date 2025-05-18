@@ -20,6 +20,8 @@ public class Movie
     public string? Director { get; set; }
     public bool IsAvailable { get; set; }
 
-    // Waiting list of users
-    public Queue<string> WaitingList { get; set; } = new();
+	public string ActionButtonContent => IsAvailable ? "Borrow Now" : "Book Now";
+
+	// Waiting list of users
+	public Queue<string> WaitingList { get; set; } = new();
 }

@@ -73,7 +73,7 @@ public partial class BorrowReturn : UserControl
 
     private void RefreshBorrowRecords()
     {
-        BorrowRecordsDataGrid.ItemsSource = _borrowReturnService.BorrowRecords.ToList();
+        BorrowRecordsDataGrid.ItemsSource = Repository.Instance.BorrowRecords.ToList();
     }
 
     private void BorrowButton_Click(object sender, RoutedEventArgs e)

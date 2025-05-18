@@ -78,7 +78,7 @@ public partial class MainWindow : Window
 
 	private void BorrowHistory_Click(object sender, RoutedEventArgs e)
 	{
-		MainContent.Content = new BorrowReturn();
+		MainContent.Content = new BorrowReturnReport();
 		NotifierService.Instance.UpdateStatusLocation((MenuItem)sender);
 	}
 
