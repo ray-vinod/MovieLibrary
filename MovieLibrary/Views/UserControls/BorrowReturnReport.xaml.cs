@@ -2,7 +2,6 @@
 using MovieLibrary.Models;
 using MovieLibrary.Services;
 
-using System.Reflection.PortableExecutable;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -86,11 +85,14 @@ public partial class BorrowReturnReport : UserControl
 
 	private void RefreshBorrowRecords()
 	{
+		BorrowRecordsDataGrid.ItemsSource = null;
 		BorrowRecordsDataGrid.ItemsSource = Repository.Instance.BorrowRecords.ToList();
-
+		BorrowRecordsDataGrid.Visibility = Visibility.Visible;
 		_user = null;
 		_movie = null;
+		FormReset();
 	}
+
 
 	private void ProcessButton_Click(object sender, RoutedEventArgs e)
 	{
@@ -99,12 +101,21 @@ public partial class BorrowReturnReport : UserControl
 		if (string.IsNullOrWhiteSpace(userName))
 		{
 			NotifierService.Instance.UpdateStatus("User name is required");
+			MovieDataGrid.Visibility = Visibility.Hidden;
+			MovieDataGrid.ItemsSource = null;
+			RefreshBorrowRecords();
+			
 			return;
 		}
 
 		if (_user == null)
 		{
 			NotifierService.Instance.UpdateStatus($"You are not a member!");
+
+			MovieDataGrid.Visibility = Visibility.Hidden;
+			MovieDataGrid.ItemsSource = null;
+			RefreshBorrowRecords();
+
 			return;
 		}
 
@@ -113,6 +124,11 @@ public partial class BorrowReturnReport : UserControl
 		if (string.IsNullOrWhiteSpace(movieTitle))
 		{
 			NotifierService.Instance.UpdateStatus("Movie's name is requied.");
+
+			MovieDataGrid.Visibility = Visibility.Hidden;
+			MovieDataGrid.ItemsSource = null;
+			RefreshBorrowRecords();
+
 			return;
 		}
 
@@ -122,12 +138,17 @@ public partial class BorrowReturnReport : UserControl
 		if (_movie == null)
 		{
 			NotifierService.Instance.UpdateStatus($"The requested movie '{movieTitle}' is not available.");
+
+			MovieDataGrid.Visibility = Visibility.Hidden;
+			MovieDataGrid.ItemsSource = null;
+			RefreshBorrowRecords();
+
 			return;
 		}
 
 		// for the return -> if has borrowed then show in return
 		var record = Repository.Instance.BorrowRecords
-			.FirstOrDefault(x=>string.Equals(x.UserId,_user.Id ) && string.Equals(x.MovieId ,_movie.Id));
+			.FirstOrDefault(x => string.Equals(x.UserId, _user.Id) && string.Equals(x.MovieId, _movie.Id) && x.IsActive);
 
 		if (record != null)
 		{
@@ -136,10 +157,12 @@ public partial class BorrowReturnReport : UserControl
 				record
 			};
 
+			BorrowRecordsDataGrid.ItemsSource = null;
 			BorrowRecordsDataGrid.ItemsSource = records;
 			ActionHeader.Visibility = Visibility.Visible;
 
-			NotifierService.Instance.UpdateStatus($"{record.UserName} {record.MovieTitle}");
+			FormReset();
+			NotifierService.Instance.UpdateStatus($"{record.UserName} has borrowed {record.MovieTitle}");
 			return;
 		}
 
@@ -175,6 +198,7 @@ public partial class BorrowReturnReport : UserControl
 		MovieDataGrid.ItemsSource = null;
 		MovieDataGrid.Visibility = Visibility.Hidden;
 		BorrowRecordsDataGrid.Visibility = Visibility.Visible;
+		ActionHeader.Visibility = Visibility.Hidden;
 
 		RefreshBorrowRecords();
 	}

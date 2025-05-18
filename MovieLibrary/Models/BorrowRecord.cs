@@ -23,4 +23,6 @@ public class BorrowRecord
 	public string BorrowDate { get; set; } = DateTime.Now.ToShortDateString();
 
 	public string? ReturnDate { get; set; }
+
+	public bool IsActive { get; set; } = true;
 }
