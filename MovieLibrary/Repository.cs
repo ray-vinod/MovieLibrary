@@ -113,5 +113,6 @@ public class Repository
         MovieRepo = new MovieRepository();
         UserRepo = new UserRepository();
         RecordRepo = new BorrowRecordRepository();
+        BorrowRecords = [];
     }
 }
