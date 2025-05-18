@@ -94,9 +94,4 @@ public partial class MainWindow : Window
 		MainContent.Content = new About();
 		NotifierService.Instance.UpdateStatusLocation((MenuItem)sender);
 	}
-
-	private void ExportRecord_Click(object sender, RoutedEventArgs e)
-	{
-
-	}
 }
