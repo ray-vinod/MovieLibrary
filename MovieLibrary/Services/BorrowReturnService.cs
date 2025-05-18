@@ -9,7 +9,6 @@ public class BorrowReturnService
 	public static BorrowReturnService Instance => _instance ??= new BorrowReturnService(Repository.Instance.MovieRepo);
 
 	private readonly MovieRepository _movieRepository;
-	//public List<BorrowRecord> BorrowRecords { get; set; } = new();
 
 	public BorrowReturnService(MovieRepository movieRepository)
 	{
@@ -84,7 +83,7 @@ public class BorrowReturnService
 			return "Movie not found";
 		}
 
-		var borrowRecord = Repository.Instance.BorrowRecords.FirstOrDefault(br => br.MovieId == movieId && br.UserId == returningUser.Id);
+		var borrowRecord = Repository.Instance.BorrowRecords.FirstOrDefault(br => br.MovieId == movieId && br.UserId == returningUser.Id && br.IsActive);
 		if (borrowRecord == null)
 		{
 			return "This user has not borrowed this movie.";
@@ -93,9 +92,10 @@ public class BorrowReturnService
 		// Update return date
 		borrowRecord.ReturnDate = DateTime.Now.ToShortDateString();
 		movie.IsAvailable = true;
+		borrowRecord.IsActive = false;
 
 		// Remove the borrow record
-		Repository.Instance.BorrowRecords.Remove(borrowRecord);
+		//Repository.Instance.BorrowRecords.Remove(borrowRecord);
 
 		if (movie.WaitingList.Count > 0)
 		{
