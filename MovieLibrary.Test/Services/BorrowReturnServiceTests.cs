@@ -44,8 +44,8 @@ public class BorrowReturnServiceTests
         // Assert
         Assert.Equal($"Movie '{movie.Title}' is now borrowed by {user.Name}.", result);
         Assert.False(movie.IsAvailable);
-        Assert.Single(service.BorrowRecords);
-        Assert.Equal(user.Id, service.BorrowRecords[0].UserId);
+        Assert.Single(Repository.Instance.BorrowRecords);
+        Assert.Equal(user.Id, Repository.Instance.BorrowRecords[0].UserId);
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public class BorrowReturnServiceTests
         // Assert
         Assert.Equal($"Movie '{movie.Title}' has been returned by {user.Name} and is now available for borrowing.", result);
         Assert.True(movie.IsAvailable);
-        Assert.Empty(service.BorrowRecords);
+        Assert.Empty(Repository.Instance.BorrowRecords);
     }
 
     [Fact]
@@ -179,8 +179,8 @@ public class BorrowReturnServiceTests
 
         // Assert
         Assert.Contains("automatically issued to next waiting user", result);
-        Assert.Single(service.BorrowRecords);
-        Assert.Equal(user2.Id, service.BorrowRecords[0].UserId);
+        Assert.Single(Repository.Instance.BorrowRecords);
+        Assert.Equal(user2.Id, Repository.Instance.BorrowRecords[0].UserId);
     }
 
     [Fact]
