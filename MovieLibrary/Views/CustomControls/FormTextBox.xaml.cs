@@ -6,10 +6,14 @@ using System.Windows.Controls;
 namespace MovieLibrary.Views.CustomControls;
 public partial class FormTextBox : UserControl, INotifyPropertyChanged
 {
+	public event TextChangedEventHandler? TextChanged;
+
 	public FormTextBox()
 	{
 		DataContext = this;
 		InitializeComponent();
+
+		Input.TextChanged += (s, e) => TextChanged?.Invoke(this, e);
 	}
 
 	public event PropertyChangedEventHandler? PropertyChanged;
