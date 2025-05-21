@@ -69,6 +69,8 @@ public partial class UserManagement : UserControl
 		UserListView.ItemsSource = itemsToShow;
 
 		PageInfoText.Text = $"Page {pageNumber} of {_totalPages} (Total: {_allUsers.Count})";
+		PreviousButton.IsEnabled = pageNumber > 1;
+		NextButton.IsEnabled = pageNumber < _totalPages;
 	}
 
 
@@ -78,6 +80,11 @@ public partial class UserManagement : UserControl
 			.OrderBy(x => x.Id)
 			.ToList();
 		_totalPages = (_allUsers.Count + _pageSize - 1) / _pageSize;
+
+		if (_currentPage > _totalPages)
+		{
+			_currentPage = _totalPages == 0 ? 1 : _totalPages;
+		}
 
 		if (goToLastPage)
 		{
